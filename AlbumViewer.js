@@ -1,46 +1,46 @@
 /*
- *	Swift Web Development Framework - Album Viewer
+ *	James-Swift/AlbumViewer
  *
  *	Copyright James Swift 2012 - Creative Commons Attribution-ShareAlike 3.0
  *
- *	2013-01-25  - Version: v0.23.0
+ *	2013-08-20  - Version: v0.24.0
  *
- *	This file creates a global object named SWDF_album_viewer which allows you to
+ *	This file creates a global object named AlbumViewer which allows you to
  *	easily insert a simple album viewer into any element on a page.
  *
  *	///////////////////////////////////////////////////////////////////////////////////
  *	Here is an example implementation:
  *
  *		//Initialize album viewer
- *		rotator = new SWDF_album_viewer({
+ *		var rotator = new AlbumViewer({
  *			container:"MY_CUSTOM_DIV",
- *			slideshow_delay:6500
+ *			slideshowDelay:6500
  *		});
  *
  *		 //Load Album
- *		rotator.load_album({
+ *		rotator.loadAlbum({
  *			name:"example",
- *			location:"images/example_album/",
+ *			location:"images/exampleAlbum/",
  *			images:['img1.jpg','other_img.jpg','test.gif']
  *		});
  *
  *		//Make it an endlessly repeating album
- *		rotator.endless_album=true;
+ *		rotator.endlessAlbum=true;
  *
  *		//Start a slideshow
- *		rotator.slideshow_start();
+ *		rotator.slideshowStart();
  *
  *
  *
  *	///////////////////////////////////////////////////////////////////////////////////
- *	The SWDF_album_viewer has the following user-setable variables:
+ *	The AlbumViewer has the following user-setable variables:
  *
  *	The following can only be set as elements in the constructor object (they cannot
- *	be altered once the SWDF_album_viewer has been initialized). If you do not specify
- *	"container", the SWDF_album_viewer will look for the other 6 variables listed below
+ *	be altered once the AlbumViewer has been initialized). If you do not specify
+ *	"container", the AlbumViewer will look for the other 6 variables listed below
  *	it. You should only specify one group or the other.
  *
- *	enable_links		boolean	If you plan to have the displayed images link to their source files, set this to true. If set to false, no links will be generated.
+ *	enableLinks		boolean	If you plan to have the displayed images link to their source files, set this to true. If set to false, no links will be generated.
  *
  *	--------------------------------------------------------------------------------------------
  *	container		string	The ID of a div or other element to construct a simple album viewer inside. If you plan to construct a complex viewer, create and then specify each element below in your html file instead.
@@ -56,73 +56,73 @@
  *	The following are optional and can either be set as elements in the constructor
  *	object or later by editing the new instance using the . dot notation:
  *
- *	blank_image		string	The path to a blank gif image. Used as the initial image to fade from. Default is "images/blank.png"
- *	fade_step		number	The amount of opacity to add/subtract on each frame of the fading proccess. A smaller value is smoother, but fades slower.
- *	fade_time		number	The time in ms between frames of the fader. A larger value fades slower, but may appear more jerky.
- *	fade_both		boolean	Default: true. By default the album viewer, when transitioning, will fade both images - the current and the new - in case they are different dimension (otherwise the edges of one mgiht just suddenly appear). If you know for sure your images will be the same size, you can specify false to halve the browsers work load.
- *	slideshow_delay		number	The delay between each slide in ms.
- *	slideshow_random	boolean	If set to true, the slideshow will display the images randomly instead of sequentially.
- *	endless_album		boolean	When set to true, once the slideshow has reached the end of the album it will continue from the start. Otherwise the slideshow will just end.
+ *	blankImage		string	The path to a blank gif image. Used as the initial image to fade from. Default is "images/blank.png"
+ *	fadeStep		number	The amount of opacity to add/subtract on each frame of the fading proccess. A smaller value is smoother, but fades slower.
+ *	fadeTime		number	The time in ms between frames of the fader. A larger value fades slower, but may appear more jerky.
+ *	fadeBoth		boolean	Default: true. By default the album viewer, when transitioning, will fade both images - the current and the new - in case they are different dimension (otherwise the edges of one mgiht just suddenly appear). If you know for sure your images will be the same size, you can specify false to halve the browsers work load.
+ *	slideshowDelay		number	The delay between each slide in ms.
+ *	slideshowRandom		boolean	If set to true, the slideshow will display the images randomly instead of sequentially.
+ *	endlessAlbum		boolean	When set to true, once the slideshow has reached the end of the album it will continue from the start. Otherwise the slideshow will just end.
  *
  *
  *
  *	///////////////////////////////////////////////////////////////////////////////////
- *	The SWDF_album_viewer has the following non-setable variables which can be accessed
+ *	The AlbumViewer has the following non-setable variables which can be accessed
  *	(after the album viewer has been intiialized), using the . dot notation. They are
  *	provided for referrence only, altering them will not change anything.
  *
  *	args			array	The arguments that where passed to the constructor. Includes the IDs for the container group even if they were not specified (as in rotator.args.img1, rotator.args.container1, rotator.args.link2 etc.) for refference.
- *	selected_image_id	number	The array ID of the currently selected image.
- *	selected_image_src	string	The image name as taken from "album_images". Has not been passed through get_src().
- *	history			array	This array contains the history of requested images. Item 0 is always the last requested image (history is unshift-ed rather than push-ed). The currently selected image is not stored in history, but is found in "selected_image_id".
- *	album_name		string	The name of the album as passed in by load_album()
- *	album_location		string	The path to the album as passed in by load_album()
- *	album_images		array	The array of images passed in by load_album(). May be an array of strings containing the image name (as indicated by the variable "images_are_arrays" = false), or an array of arrays containing image properties ("images_are_arrays" = true).
- *	images_are_arrays	boolean Indicates whether "album_images" is an array of strings, or an array of arrays.
- *	image_name_field	string	If "album_images" is an array of arrays the value of this variable indicates the field in each array that contains the image's file name. (I.E. album_images[images_name_field] = "test.jpg") Defaults to "name".
- *	slideshow_stopped	boolean	If the slideshow is stopped, this variable will be set to true.
+ *	selectedImageID		number	The array ID of the currently selected image.
+ *	selectedImageSrc	string	The image name as taken from "albumImages". Has not been passed through getSrc().
+ *	history			array	This array contains the history of requested images. Item 0 is always the last requested image (history is unshift-ed rather than push-ed). The currently selected image is not stored in history, but is found in "selectedImageID".
+ *	albumName		string	The name of the album as passed in by loadAlbum()
+ *	albumLocation		string	The path to the album as passed in by loadAlbum()
+ *	albumImages		array	The array of images passed in by loadAlbum(). May be an array of strings containing the image name (as indicated by the variable "imagesAreArrays" = false), or an array of arrays containing image properties ("imagesAreArrays" = true).
+ *	imagesAreArrays		boolean Indicates whether "albumImages" is an array of strings, or an array of arrays.
+ *	imageNameField		string	If "albumImages" is an array of arrays the value of this variable indicates the field in each array that contains the image's file name. (I.E. albumImages[imageNameField] = "test.jpg") Defaults to "name".
+ *	slideshowStopped	boolean	If the slideshow is stopped, this variable will be set to true.
  *
  *
  *
  *	///////////////////////////////////////////////////////////////////////////////////
- *	The SWDF_album_viewer has the following functions (methods) which you can use to
+ *	The AlbumViewer has the following functions (methods) which you can use to
  *	controll it:
  *
- *	load_album (				Call load_album to (re-)initialize the album viewer with album data. returns true on success, throws an error on failure.
+ *	loadAlbum (				Call loadAlbum to (re-)initialize the album viewer with album data. returns true on success, throws an error on failure.
  *		object {				It only has one argument, which must be an object.
  *			name					REQUIRED A string containing the name of your album.
- *			images					REQUIRED An array of strings containing image names OR an array of arrays containing image properties. If you are using an array of arrays please indicate which field will contain each image's file name by specifying image_field_name (see below).
- *			location				OPTIONAL A string containing the path to the folder containing your album images. By default the album viewer will combine this path with the selected image filename when loading the source file. (E.G. my_album_location/image1.jpg), but if each image is in a different locationecory you can set "location" null and hard code the full path into each image's file name in the "images" array.
- *			image_name_field			OPTIONAL If "images" is an array of arrays the value of this variable indicates the field in each array that contains the image's file name. (I.E. if "images[0].fileName = 'test.jpg'" set this variable to "fileName") Defaults to "name".
+ *			images					REQUIRED An array of strings containing image names OR an array of arrays containing image properties. If you are using an array of arrays please indicate which field will contain each image's file name by specifying imageNameField (see below).
+ *			location				OPTIONAL A string containing the path to the folder containing your album images. By default the album viewer will combine this path with the selected image filename when loading the source file. (E.G. my_albumLocation/image1.jpg), but if each image is in a different locationecory you can set "location" null and hard code the full path into each image's file name in the "images" array.
+ *			imageNameField			OPTIONAL If "images" is an array of arrays the value of this variable indicates the field in each array that contains the image's file name. (I.E. if "images[0].fileName = 'test.jpg'" set this variable to "fileName") Defaults to "name".
  *		  }
  *		)
  *
- *	switch_to (				Call switch_to to display a specific image form the "album_images" array.
- *			image_id			The "Images" array id of an image you want to switch to. If the id is out of bounds it will be corrected.
+ *	switchTo (				Call switchTo to display a specific image form the "albumImages" array.
+ *			imageID			The "Images" array id of an image you want to switch to. If the id is out of bounds it will be corrected.
  *		)
  *
- *	find_image_id (				Call this when you want to find the id of an image's file-name. Returns the id of the item in the album_images array on success, boolean false on failure.
- *			image_name		The name of the image
+ *	findImageID (				Call this when you want to find the id of an image's file-name. Returns the id of the item in the albumImages array on success, boolean false on failure.
+ *			imageName			The name of the image
  *		      )
  *
- *	safe_image_id (				When processing user defined image IDs, pass them through this function. It will check they are valid, and try to intelligently guess what the user wanted if the id is invalid. (For example, if the id is past the end of the album it will either return the last image or if endless_album==true it will return the first image).
- *			image_id		The numerical id which might represent an image
+ *	safeImageID (				When processing user defined image IDs, pass them through this function. It will check they are valid, and try to intelligently guess what the user wanted if the id is invalid. (For example, if the id is past the end of the album it will either return the last image or if endlessAlbum==true it will return the first image).
+ *			imageID			The numerical id which might represent an image
  *		      )
  *
- *	next_image ( )				Moves to the next image in the array. If "endless_album" is true, it will reset to the begining of the array once the last item has been reached.
+ *	imageNext ( )				Moves to the next image in the array. If "endlessAlbum" is true, it will reset to the begining of the array once the last item has been reached.
  *
- *	previous_image ( )			Moves to the previous image in the array. If "endless_album" is true, it will start at the end of the array once the first item in the array has been reached.
+ *	imagePrevious ( )			Moves to the previous image in the array. If "endlessAlbum" is true, it will start at the end of the array once the first item in the array has been reached.
  *
- *	random_image ( )			Displays a random image form the "album_images" array.
+ *	imageRandom ( )				Displays a random image form the "albumImages" array.
  *
- *	start_slideshow (			Starts a slideshow of the images in "album_images"
- *			randomly			If this argument is true, it will set "slideshow_random" to true and play a random never-ending slideshow.
- *			start_at			The ID of the image to start the slideshow at. If not set, will default to next image();
+ *	slideshowStart (			Starts a slideshow of the images in "albumImages"
+ *			randomly			If this argument is true, it will set "slideshowRandom" to true and play a random never-ending slideshow.
+ *			startAt				The ID of the image to start the slideshow at. If not set, will default to next image();
  *		)
  *
- *	stop_slideshow ( )			Stops the slideshow (if one is taking place).
+ *	slideshowStop ( )			Stops the slideshow (if one is taking place).
  *
- *	toggle_slideshow ( )			Starts/Stops the slideshow depending on it's state.
+ *	slideshowToggle ( )			Starts/Stops the slideshow depending on it's state.
  *
  *
  *
@@ -130,41 +130,41 @@
  *
  *
  *	///////////////////////////////////////////////////////////////////////////////////
- *	The SWDF_album_viewer has the following functions available for you to reassign to
+ *	The AlbumViewer has the following functions available for you to reassign to
  *	aid in building applications on top of it. You do not need to reassign them, the
  *	album viewer will function correctly normally, but you may wish to resaign them
  *	to extend it's abilities.
  *
- *	on_switch_to (				Called whenever the selected image changes.
- *		selected_image_id		The id of the newly selected image is passed as an argument
+ *	onSwitchTo (				Called whenever the selected image changes.
+ *		selectedImageID				The id of the newly selected image is passed as an argument
  *		)
  *
- *	loading_started ( )			Called whenever the SWDF_album_viewer expects a delay in loading the requested image (more than 10 few ms).
+ *	loadingStarted ( )			Called whenever the AlbumViewer expects a delay in loading the requested image (more than 10 ms).
  *
- *	loading_completed ( )		Called when the SWDF_album_viewer has finished dowloading data. Just beofre the fade transition has started,
+ *	loadingComplete ( )			Called when the AlbumViewer has finished dowloading data. Just before the fade transition has started,
  *
- *	get_src (					Caled whenever the SWDF_album_viewer needs to download an image. It allows you to alter the requested URL (perhaps to route it through an image resizer script)
- *		image_id				The array id of the requested image (from album_images)
+ *	getSrc (				Caled whenever the AlbumViewer needs to download an image. It allows you to alter the requested URL (perhaps to route it through an image resizer script)
+ *		imageID					The array id of the requested image (from albumImages)
  *		)
- *		return				Your function should return a string containg the location of the image.
+ *		return					Your function should return a string containg the location of the image.
  *
- *	get_alt (					Caled whenever the SWDF_album_viewer want to update the "alt" text of an image. You could perhpas append you own description.
- *		image_id				The array id of the requested image (from album_images)
+ *	getAlt (				Caled whenever the AlbumViewer want to update the "alt" text of an image. You could perhpas append you own description.
+ *		imageID					The array id of the requested image (from albumImages)
  *		)
- *		return				Your function should return a string containg the new alt text for the requested image
+ *		return					Your function should return a string containg the new alt text for the requested image
  *
- *	get_link (				Caled whenever the SWDF_album_viewer needs to generate a link to an image. By default it just links to the image source, but you might want to make it link to a larger version, or an album page with cooments.
- *		image_id				The array id of the requested image (from album_images)
+ *	getLink (				Caled whenever the AlbumViewer needs to generate a link to an image. By default it just links to the image source, but you might want to make it link to a larger version, or an album page with cooments.
+ *		imageID					The array id of the requested image (from albumImages)
  *		)
- *		return				Your function should return a string containg the url to be used as a link to this image.
+ *		return					Your function should return a string containg the url to be used as a link to this image.
  *
  *
  *	You could reasign one of the above functions like this:
  *
- *		//(assuming an instance of the SWDF_album_viewer named rotator)
+ *		//(assuming an instance of the AlbumViewer named rotator)
  *
- *		rotator.get_link = function(image_id) {
- *			return "large_images/" + this.album_images[image_id];
+ *		rotator.getLink = function (imageID) {
+ *			return "large_images/" + this.albumImages[imageID];
  *		}
  *
  *
@@ -172,53 +172,55 @@
  *
  *
  *	///////////////////////////////////////////////////////////////////////////////////
- *	A note on the construction of the SWDF_album_viewer:
+ *	A note on the construction of the AlbumViewer:
  *
  *	Javascript doesn't fully support classes like other languages do. By use of the NEW
  *	keyword, you can create a copy of a function, which means you can sort of construct
  *	a class by declaring it inside a function then instantiating it with the NEW keyword.
  *
- *	The problem with this approach is that a LIERAL copy is made of the function, meaning
+ *	The problem with this approach is that a LITERAL copy is made of the function, meaning
  *	that a lot of memory would be needlessly consumed with each new instance. The solution
  *	to this problem is to put only the constructor inside the main function, and declare
  *	any other needed functions outside of it. That way, when a copy is made, only the
  *	constructor is copied, the other functions are just refferenced.
  *
  *	The problem with doing that though is that the global namespace is cluttered up with
- *	lots of extra functions. To avoid that, the SWDF_album_viewer is encapsulated inside
+ *	lots of extra functions. To avoid that, the AlbumViewer is encapsulated inside
  *	a closure. A closure is a function which is executed imediately after being declared.
  *	For example:
  *
- *		var a_closure = function() {
+ *		var aClosure = function() {
  *
  *			function do_stuff(i) {
- *				return i+=1;
+ *				return i += 1;
  *			}
  *
- *			return function construct(arg1,arg2) {
- *				var i=do_stuff(2);
+ *			return function construct(arg1, arg2) {
+ *				var i = do_stuff(2);
  *				return i;
  *			}
  *
  *		}();
  *
  *	Note the () at the end of the line. A closure has the effect of hiding anything that is
- *	declared within it from the global namespace. In the above instance, only "a_closure"
- *	is visible in the global namespace, and "a_closure" represents the function called
+ *	declared within it from the global namespace. In the above instance, only "aClosure"
+ *	is visible in the global namespace, and "aClosure" represents the function called
  *	"construct". When a new instance is created, only the "construct" function is copied.
- *	"do_stuff" is just linked/referenced. That is the form the SWDF_album_viewer takes.
+ *	"do_stuff" is just linked/referenced. That is the form the AlbumViewer takes.
  *
  *	It can look a little confusing at first, but is really quite simple once you get your
  *	head around it.
+ *	
+ *	Happy Hacking!
  */
 
 
-var SWDF_album_viewer = SWDF_album_viewer || (function () {
+var AlbumViewer = AlbumViewer || (function () {
 	"use strict";
 
-	var	construct, build_html, load_album, switch_to, fade, safe_image_id, find_image_id,
-		stop_slideshow, start_slideshow, toggle_slideshow,
-		next_image, previous_image, random_image,
+	var	construct, buildHTML, loadAlbum, switchTo, fade, safeImageID, findImageID,
+		slideshowStop, slideshowStart, slideshowToggle,
+		imageNext, imagePrevious, imageRandom,
 		IS_IE, IS_OLD_IE,
 		instances = 0;
 
@@ -245,24 +247,24 @@ var SWDF_album_viewer = SWDF_album_viewer || (function () {
 		instances += 1;
 
 		//Default State for user-setable variables
-		that.blank_image = args.blank_image || "images/blank.png";						//The location of a blank image to load at startup
-		that.fade_step = args.fade_step || 2;									//How much opacity should be added/subtracted each cycle
-		that.fade_time = args.fade_time || 12;									//How long in ms between each cycle
-		that.slideshow_delay = args.slideshow_delay || 5000;							//How long in ms before the next image is loaded
-		that.slideshow_random = args.slideshow_random || false;							//Load random images instead of start to finish
-		that.endless_album = (args.endless_album === undefined || args.endless_album === true) ? true : false;	//Should the album reset when it reaches the end
-		that.fade_both = args.fade_both || true;
+		that.blankImage = args.blankImage || "images/blank.png";						//The location of a blank image to load at startup
+		that.fadeStep = args.fadeStep || 2;									//How much opacity should be added/subtracted each cycle
+		that.fadeTime = args.fadeTime || 12;									//How long in ms between each cycle
+		that.slideshowDelay = args.slideshowDelay || 5000;							//How long in ms before the next image is loaded
+		that.slideshowRandom = args.slideshowRandom || false;							//Load random images instead of start to finish
+		that.endlessAlbum = (args.endlessAlbum === undefined || args.endlessAlbum === true) ? true : false;	//Should the album reset when it reaches the end
+		that.fadeBoth = args.fadeBoth || true;
 
 		//Other slideshow variables
 		me.c1 = {};
 		me.c2 = {};
-		me.slideshow_stopped = true;
-		me.instance_id = instances;
-		me.enable_links = (args.enable_links === undefined || args.enable_links === true) ? true : false;
+		me.slideshowStopped = true;
+		me.instanceID = instances;
+		me.enableLinks = (args.enableLinks === undefined || args.enableLinks === true) ? true : false;
 		me.loading = false;
-		me.loading_started_called = false;
-		that.selected_image_id = null;
-		that.selected_image_src = null;
+		me.loadingStartedCalled = false;
+		that.selectedImageID = null;
+		that.selectedImageSrc = null;
 		that.history = [];
 
 		//Should we build the html elements ourselves?
@@ -271,15 +273,15 @@ var SWDF_album_viewer = SWDF_album_viewer || (function () {
 			me.c0 = document.getElementById(args.container);
 
 			//Build HTML elements
-			build_html(me, that);
+			buildHTML(me, that);
 
 			//Update args with element names
-			args.container1 = "SWDF_album_viewer_" + me.instance_id + "_t1";
-			args.link1 = "SWDF_album_viewer_" + me.instance_id + "_l1";
-			args.img1 = "SWDF_album_viewer_" + me.instance_id + "_i1";
-			args.container2 = "SWDF_album_viewer_" + me.instance_id + "_t2";
-			args.link2 = "SWDF_album_viewer_" + me.instance_id + "_l2";
-			args.img2 = "SWDF_album_viewer_" + me.instance_id + "_i2";
+			args.container1 = "AlbumViewer_" + me.instanceID + "_t1";
+			args.link1 = "AlbumViewer_" + me.instanceID + "_l1";
+			args.img1 = "AlbumViewer_" + me.instanceID + "_i1";
+			args.container2 = "AlbumViewer_" + me.instanceID + "_t2";
+			args.link2 = "AlbumViewer_" + me.instanceID + "_l2";
+			args.img2 = "AlbumViewer_" + me.instanceID + "_i2";
 		}
 
 		//Check all the needed html Elements are in place
@@ -287,14 +289,14 @@ var SWDF_album_viewer = SWDF_album_viewer || (function () {
 				document.getElementById(args.img1)		!== null &&
 				document.getElementById(args.container2)	!== null &&
 				document.getElementById(args.img2)		!== null &&
-				(me.enable_links === false || (document.getElementById(args.link1) !== null && document.getElementById(args.link2) !== null))
+				(me.enableLinks === false || (document.getElementById(args.link1) !== null && document.getElementById(args.link2) !== null))
 				) {
 			//Link Elements to me
 			me.c1.table = document.getElementById(args.container1);
 			me.c1.img = document.getElementById(args.img1);
 			me.c2.table = document.getElementById(args.container2);
 			me.c2.img = document.getElementById(args.img2);
-			if (me.enable_links === true) {
+			if (me.enableLinks === true) {
 				me.c1.link = document.getElementById(args.link1);
 				me.c2.link = document.getElementById(args.link2);
 			}
@@ -317,73 +319,73 @@ var SWDF_album_viewer = SWDF_album_viewer || (function () {
 		that.args = args;
 
 		//Declare functions that can be over-written by the user
-		that.on_switch_to = function () {};
-		that.loading_started = function () {};
-		that.loading_completed = function () {};
-		that.get_src = function (src_id) {
+		that.onSwitchTo = function () {};
+		that.loadingStarted = function () {};
+		that.loadingComplete = function () {};
+		that.getSrc = function (srcID) {
 			var isrc;
-			if (this.images_are_array === true) {
-				isrc = this.album_images[src_id][this.image_name_field];
+			if (this.imagesAreArrays === true) {
+				isrc = this.albumImages[srcID][this.imageNameField];
 			} else {
-				isrc = this.album_images[src_id];
+				isrc = this.albumImages[srcID];
 			}
-			if (this.album_location === null) {
+			if (this.albumLocation === null) {
 				return isrc;
 			} else {
-				return this.album_location + isrc;
+				return this.albumLocation + isrc;
 			}
 		};
-		that.get_alt = function (src_id) {
-			if (this.images_are_arrays === true) {
-				return this.album_images[src_id][this.image_name_field].substr(this.album_images[src_id][this.image_name_field].lastIndexOf("/") + 1);
+		that.getAlt = function (srcID) {
+			if (this.imagesAreArrays === true) {
+				return this.albumImages[srcID][this.imageNameField].substr(this.albumImages[srcID][this.imageNameField].lastIndexOf("/") + 1);
 			} else {
-				return this.album_images[src_id].substr(this.album_images[src_id].lastIndexOf("/") + 1);
+				return this.albumImages[srcID].substr(this.albumImages[srcID].lastIndexOf("/") + 1);
 			}
 		};
-		that.get_link = function (src_id) {
+		that.getLink = function (srcID) {
 			var isrc;
-			if (this.images_are_array === true) {
-				isrc = this.album_images[src_id][this.image_name_field];
+			if (this.imagesAreArrays === true) {
+				isrc = this.albumImages[srcID][this.imageNameField];
 			} else {
-				isrc = this.album_images[src_id];
+				isrc = this.albumImages[srcID];
 			}
-			if (this.album_location === null) {
+			if (this.albumLocation === null) {
 				return isrc;
 			} else {
-				return this.album_location + isrc;
+				return this.albumLocation + isrc;
 			}
 		};
 
 		//Link our functions to this instance (rather than declaring them inside it which would copy them for every instance)
-		that.load_album		= function (album) {
-			return load_album(album, me, that);
+		that.loadAlbum		= function (album) {
+			return loadAlbum(album, me, that);
 		};
-		that.switch_to		= function (src_id) {
-			return switch_to(src_id, me, that);
+		that.switchTo		= function (srcID) {
+			return switchTo(srcID, me, that);
 		};
-		that.safe_image_id	= function (src_id) {
-			return safe_image_id(src_id, me, that);
+		that.safeImageID	= function (srcID) {
+			return safeImageID(srcID, me, that);
 		};
-		that.find_image_id	= function (image) {
-			return find_image_id(image, me, that);
+		that.findImageID	= function (image) {
+			return findImageID(image, me, that);
 		};
-		that.start_slideshow	= function (randomly, start_at) {
-			return start_slideshow(randomly, start_at, me, that);
+		that.slideshowStart	= function (randomly, startAt) {
+			return slideshowStart(randomly, startAt, me, that);
 		};
-		that.stop_slideshow	= function () {
-			return stop_slideshow(me, that);
+		that.slideshowStop	= function () {
+			return slideshowStop(me, that);
 		};
-		that.toggle_slideshow	= function () {
-			return toggle_slideshow(me, that);
+		that.slideshowToggle	= function () {
+			return slideshowToggle(me, that);
 		};
-		that.next_image		= function () {
-			return next_image(me, that);
+		that.imageNext		= function () {
+			return imageNext(me, that);
 		};
-		that.previous_image	= function () {
-			return previous_image(me, that);
+		that.imagePrevious	= function () {
+			return imagePrevious(me, that);
 		};
-		that.random_image	= function () {
-			return random_image(me, that);
+		that.imageRandom	= function () {
+			return imageRandom(me, that);
 		};
 		me.fade			= function () {
 			return fade(me, that);
@@ -394,14 +396,14 @@ var SWDF_album_viewer = SWDF_album_viewer || (function () {
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	build_html = function (me, that) {
+	buildHTML = function (me, that) {
 		var i, dm = {};
 		//Empty the container
 		me.c0.innerHTML = "";
 		//Build html elements
 		for (i = 1; i <= 2; i += 1) {
 			dm.table = document.createElement("table");
-			dm.table.setAttribute("id", "SWDF_album_viewer_" + me.instance_id + "_t" + i);
+			dm.table.setAttribute("id", "AlbumViewer_" + me.instanceID + "_t" + i);
 			dm.table.setAttribute("cellpadding", "0");
 			dm.table.setAttribute("cellspacing", "0");
 			dm.table.style.position = "absolute";
@@ -414,20 +416,20 @@ var SWDF_album_viewer = SWDF_album_viewer || (function () {
 			dm.tbody = document.createElement("tbody");
 			dm.tr = document.createElement("tr");
 			dm.td = document.createElement("td");
-			if (me.enable_links === true) {
+			if (me.enableLinks === true) {
 				dm.a = document.createElement("a");
 				dm.a.setAttribute("target", "_blank");
-				dm.a.setAttribute("id", "SWDF_album_viewer_" + me.instance_id + "_l" + i);
+				dm.a.setAttribute("id", "AlbumViewer_" + me.instanceID + "_l" + i);
 				dm.img = document.createElement("img");
-				dm.img.setAttribute("id", "SWDF_album_viewer_" + me.instance_id + "_i" + i);
-				dm.img.setAttribute("src", that.blank_image);
+				dm.img.setAttribute("id", "AlbumViewer_" + me.instanceID + "_i" + i);
+				dm.img.setAttribute("src", that.blankImage);
 				dm.img.setAttribute("alt", "Loading");
 				dm.a.appendChild(dm.img);
 				dm.td.appendChild(dm.a);
 			} else {
 				dm.img = document.createElement("img");
-				dm.img.setAttribute("id", "SWDF_album_viewer_" + me.instance_id + "_i" + i);
-				dm.img.setAttribute("src", that.blank_image);
+				dm.img.setAttribute("id", "AlbumViewer_" + me.instanceID + "_i" + i);
+				dm.img.setAttribute("src", that.blankImage);
 				dm.img.setAttribute("alt", "Loading");
 				dm.td.appendChild(dm.img);
 			}
@@ -441,16 +443,16 @@ var SWDF_album_viewer = SWDF_album_viewer || (function () {
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	load_album = function (album, me, that) {
+	loadAlbum = function (album, me, that) {
 
 		if (typeof album === "object") {
 			//Convert images objects into arrays
 			if (typeof album.images === "object") {
-				var key, old_album_images = album.images;
+				var key, oldAlbumImages = album.images;
 				album.images = [];
-				for (key in old_album_images) {
-					if (old_album_images.hasOwnProperty(key)) {
-						album.images.push(old_album_images[key]);
+				for (key in oldAlbumImages) {
+					if (oldAlbumImages.hasOwnProperty(key)) {
+						album.images.push(oldAlbumImages[key]);
 					}
 				}
 			}
@@ -458,38 +460,38 @@ var SWDF_album_viewer = SWDF_album_viewer || (function () {
 			if (album.name && album.images && album.images.length > 0 && (album.location === null || typeof album.location === "string")) {
 
 				//Cancel any current actions
-				that.stop_slideshow();
+				that.slideshowStop();
 
 				//Populate object
 
-				that.album_name = album.name;
-				that.album_images = album.images;
-				that.selected_image_id = null;
-				that.selected_image_id = null;
+				that.albumName = album.name;
+				that.albumImages = album.images;
+				that.selectedImageID = null;
+				that.selectedImageID = null;
 
-				that.image_name_field = album.image_name_field || "name";
-				that.images_are_arrays = false;
-				if (typeof that.album_images[0] !== "string") {
-					that.images_are_arrays = true;
+				that.imageNameField = album.imageNameField || "name";
+				that.imagesAreArrays = false;
+				if (typeof that.albumImages[0] !== "string") {
+					that.imagesAreArrays = true;
 				}
 
 				if (album.location !== null) {
 					album.location = album.location.replace(/\\/g, "/");
-					that.album_location = (album.location.charAt(album.location.length - 1) !== "/") ? album.location + "/" : album.location;
+					that.albumLocation = (album.location.charAt(album.location.length - 1) !== "/") ? album.location + "/" : album.location;
 				} else {
-					that.album_location = null;
+					that.albumLocation = null;
 				}
 
 
 				//Reset Element variables
 
-				me.selected_image_id = -1;
-				me.selected_container = 1;
+				me.selectedImageID = -1;
+				me.selectedContainer = 1;
 				me.c1.opacity = 100;
 				me.c2.opacity = 0;
 
-				me.image_name_field = that.image_name_field;
-				me.images_are_arrays = that.images_are_arrays;
+				me.imageNameField = that.imageNameField;
+				me.imagesAreArrays = that.imagesAreArrays;
 
 				//Reset Opacity
 				if (IS_IE === false) {
@@ -512,101 +514,101 @@ var SWDF_album_viewer = SWDF_album_viewer || (function () {
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	switch_to = function (src_id, me, that) {
+	switchTo = function (srcID, me, that) {
 
-		//Catch over-runs and handle endless_album setting
-		me.next_image_id = that.safe_image_id(src_id);
+		//Catch over-runs and handle endlessAlbum setting
+		me.nextImageID = that.safeImageID(srcID);
 
 		//If attempting to switch to the current image, just return true (unless in random slideshow)
-		if (me.next_image_id === me.selected_image_id && (that.slideshow_random === false || me.slideshow_stopped === false)) {
+		if (me.nextImageID === me.selectedImageID && (that.slideshowRandom === false || me.slideshowStopped === false)) {
 			return true;
 		}
 
 		//Update that with currently selected image
-		if (me.selected_image_id > -1) {
-			that.history.unshift(me.selected_image_id);
+		if (me.selectedImageID > -1) {
+			that.history.unshift(me.selectedImageID);
 		}
-		that.selected_image_id = me.next_image_id;
-		if (me.images_are_arrays === true) {
-			that.selected_image_src = that.album_images[me.next_image_id][me.image_name_field];
+		that.selectedImageID = me.nextImageID;
+		if (me.imagesAreArrays === true) {
+			that.selectedImageSrc = that.albumImages[me.nextImageID][me.imageNameField];
 		} else {
-			that.selected_image_src = that.album_images[me.next_image_id];
+			that.selectedImageSrc = that.albumImages[me.nextImageID];
 		}
 
-		//Call loading_started() in case the user has reassigned that function
+		//Call loadingStarted() in case the user has reassigned that function
 		me.loading = true;
 		setTimeout(
 			function () {
-				if (me.loading === true && me.loading_started_called === false) {
-					that.loading_started();
-					me.loading_started_called = true;
+				if (me.loading === true && me.loadingStartedCalled === false) {
+					that.loadingStarted();
+					me.loadingStartedCalled = true;
 				}
 			},
 			10
 		);
 
 		//Apply actions to appropriate container
-		if (me.selected_container === 1) {
+		if (me.selectedContainer === 1) {
 			//Stop any actions currently pending
 			me.c2.img.onload = null;
-			me.c2.img.src = that.blank_image;
+			me.c2.img.src = that.blankImage;
 
 			//Set onload to trigger fade to switch to hidden container
 			me.c2.img.onload = function () {
 				clearTimeout(me.timer);
 				me.fade();
 				if (me.c1.img.onload === null && me.loading === true) {
-					me.loading_started_called = false;
+					me.loadingStartedCalled = false;
 					me.loading = false;
-					that.loading_completed();
+					that.loadingComplete();
 				}
 			};
 
 			//Load next source into currently hidden container
-			me.c2.img.src = that.get_src(me.next_image_id);
-			me.c2.img.alt = that.get_alt(me.next_image_id);
-			if (me.enable_links === true) {
-				me.c2.link.href = that.get_link(me.next_image_id);
+			me.c2.img.src = that.getSrc(me.nextImageID);
+			me.c2.img.alt = that.getAlt(me.nextImageID);
+			if (me.enableLinks === true) {
+				me.c2.link.href = that.getLink(me.nextImageID);
 			}
 
 		} else {
 			//Stop any actions currently pending
 			me.c1.img.onload = null;
-			me.c1.img.src = that.blank_image;
+			me.c1.img.src = that.blankImage;
 
 			//Set onload to trigger fade to switch to hidden container
 			me.c1.img.onload = function () {
 				me.timer = clearTimeout(me.timer);
 				me.fade();
 				if (me.c2.img.onload === null && me.loading === true) {
-					me.loading_started_called = false;
+					me.loadingStartedCalled = false;
 					me.loading = false;
-					that.loading_completed();
+					that.loadingComplete();
 				}
 			};
 
 			//Load next source into currently hidden container
-			me.c1.img.src = that.get_src(me.next_image_id);
-			me.c1.img.alt = that.get_alt(me.next_image_id);
-			if (me.enable_links === true) {
-				me.c1.link.href = that.get_link(me.next_image_id);
+			me.c1.img.src = that.getSrc(me.nextImageID);
+			me.c1.img.alt = that.getAlt(me.nextImageID);
+			if (me.enableLinks === true) {
+				me.c1.link.href = that.getLink(me.nextImageID);
 			}
 
 		}
 
-		that.on_switch_to(me.next_image_id);
+		that.onSwitchTo(me.nextImageID);
 		return true;
 	};
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	fade = function (me, that) {
-		if (me.selected_container === 1) {
-			me.c1.opacity = me.c1.opacity - that.fade_step;
-			me.c2.opacity = me.c2.opacity + that.fade_step;
+		if (me.selectedContainer === 1) {
+			me.c1.opacity = me.c1.opacity - that.fadeStep;
+			me.c2.opacity = me.c2.opacity + that.fadeStep;
 		} else {
-			me.c1.opacity = me.c1.opacity + that.fade_step;
-			me.c2.opacity = me.c2.opacity - that.fade_step;
+			me.c1.opacity = me.c1.opacity + that.fadeStep;
+			me.c2.opacity = me.c2.opacity - that.fadeStep;
 		}
 
 		//Catch over-runs
@@ -614,10 +616,10 @@ var SWDF_album_viewer = SWDF_album_viewer || (function () {
 		me.c2.opacity = (me.c2.opacity < 0 ? 0 : (me.c2.opacity > 100 ? 100 : me.c2.opacity));
 
 		if (IS_IE === false) {
-			if (that.fade_both === true) { me.c1.table.style.opacity = (me.c1.opacity / 100); }
+			if (that.fadeBoth === true) { me.c1.table.style.opacity = (me.c1.opacity / 100); }
 			me.c2.table.style.opacity = (me.c2.opacity / 100);
 		} else {
-			if (that.fade_both === true) { me.c1.table.style.filter = "alpha(opacity=" + me.c1.opacity + ")"; }
+			if (that.fadeBoth === true) { me.c1.table.style.filter = "alpha(opacity=" + me.c1.opacity + ")"; }
 			me.c2.table.style.filter = "alpha(opacity=" + me.c2.opacity + ")";
 		}
 
@@ -638,45 +640,45 @@ var SWDF_album_viewer = SWDF_album_viewer || (function () {
 		}
 
 		if (me.c1.opacity > 0 && me.c1.opacity < 100) {
-			me.timer = setTimeout(function () { me.fade(); }, that.fade_time);
+			me.timer = setTimeout(function () { me.fade(); }, that.fadeTime);
 		} else {
 			//Update Selected source
-			me.selected_image_id = me.next_image_id;
+			me.selectedImageID = me.nextImageID;
 
-			//Finished fading so update me.selected_container
-			if (me.selected_container === 1) {
+			//Finished fading so update me.selectedContainer
+			if (me.selectedContainer === 1) {
 				me.c2.img.onload = null;
-				me.selected_container = 2;
+				me.selectedContainer = 2;
 				//Auto-load the next image if no action is currently taking place
 				if (me.c1.img.onload === null) {
-					me.c1.img.src = that.get_src(that.safe_image_id(me.selected_image_id + 1));
+					me.c1.img.src = that.getSrc(that.safeImageID(me.selectedImageID + 1));
 				}
 			} else {
 				me.c1.img.onload = null;
-				me.selected_container = 1;
+				me.selectedContainer = 1;
 				//Auto-load the next image if no action is currently taking place
 				if (me.c2.img.onload === null) {
-					me.c2.img.src = that.get_src(that.safe_image_id(me.selected_image_id + 1));
+					me.c2.img.src = that.getSrc(that.safeImageID(me.selectedImageID + 1));
 				}
 			}
 
 			//Should we move onto the next picture?
-			if (me.slideshow_stopped !== true) {
-				if (that.slideshow_random === false) {
+			if (me.slideshowStopped !== true) {
+				if (that.slideshowRandom === false) {
 					//Just move onto the next in the sequence
 					me.timer = setTimeout(
 						function () {
-							that.next_image();
+							that.imageNext();
 						},
-						that.slideshow_delay
+						that.slideshowDelay
 					);
 				} else {
 					//Pick a random picture to move onto
 					me.timer = setTimeout(
 						function () {
-							that.random_image();
+							that.imageRandom();
 						},
-						that.slideshow_delay
+						that.slideshowDelay
 					);
 				}
 			}
@@ -687,74 +689,74 @@ var SWDF_album_viewer = SWDF_album_viewer || (function () {
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	safe_image_id = function (src_id, me, that) {
-		if (src_id >= that.album_images.length) {
-			src_id = that.endless_album ? 0 : that.album_images.length - 1;
+	safeImageID = function (srcID, me, that) {
+		if (srcID >= that.albumImages.length) {
+			srcID = that.endlessAlbum ? 0 : that.albumImages.length - 1;
 		}
-		if (src_id < 0) {
-			src_id = that.endless_album ? that.album_images.length - 1 : 0;
+		if (srcID < 0) {
+			srcID = that.endlessAlbum ? that.albumImages.length - 1 : 0;
 		}
-		if (that.album_images[src_id] === undefined) {
+		if (that.albumImages[srcID] === undefined) {
 			//try to find the next id in the array
-			while (that.album_images[src_id] === undefined && src_id <= that.album_images.length) {
-				src_id += 1;
+			while (that.albumImages[srcID] === undefined && srcID <= that.albumImages.length) {
+				srcID += 1;
 			}
 			//If still not found return 0
-			if (that.album_images[src_id] === undefined) {
-				src_id = 0;
+			if (that.albumImages[srcID] === undefined) {
+				srcID = 0;
 			}
 		}
-		return src_id;
+		return srcID;
 	};
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	find_image_id = function (image, me, that) {
+	findImageID = function (image, me, that) {
 		var img, i = 0;
-		if (me.images_are_arrays === true) {
-			for (img in that.album_images) {
-				if (that.album_images.hasOwnProperty(img)) {
-					if (that.album_images[img][me.image_name_field] === image) {
+		if (me.imagesAreArrays === true) {
+			for (img in that.albumImages) {
+				if (that.albumImages.hasOwnProperty(img)) {
+					if (that.albumImages[img][me.imageNameField] === image) {
 						return i;
 					}
 					i += 1;
 				}
 			}
 		} else {
-			return that.safe_image_id(that.album_images.indexOf(image));
+			return that.safeImageID(that.albumImages.indexOf(image));
 		}
 		return false;
 	};
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	stop_slideshow = function (me, that) {
+	slideshowStop = function (me, that) {
 		window.clearTimeout(me.timer);
 		me.c1.img.onload = null;
 		me.c2.img.onload = null;
-		me.slideshow_stopped = true;
-		that.slideshow_stopped = true;
+		me.slideshowStopped = true;
+		that.slideshowStopped = true;
 		return true;
 	};
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	start_slideshow = function (randomly, start_at, me, that) {
-		that.stop_slideshow();
-		me.slideshow_stopped = false;
-		that.slideshow_stopped = false;
+	slideshowStart = function (randomly, startAt, me, that) {
+		that.slideshowStop();
+		me.slideshowStopped = false;
+		that.slideshowStopped = false;
 		if (randomly === true) {
-			that.slideshow_random = true;
+			that.slideshowRandom = true;
 		}
-		if (that.slideshow_random === true) {
-			that.switch_to(Math.floor(Math.random() * (that.album_images.length - 1)));
-		} else if (me.selected_image_id === that.album_images.length - 1) {
-			that.switch_to(0);
+		if (that.slideshowRandom === true) {
+			that.switchTo(Math.floor(Math.random() * (that.albumImages.length - 1)));
+		} else if (me.selectedImageID === that.albumImages.length - 1) {
+			that.switchTo(0);
 		} else {
-			if (start_at === null || start_at === undefined) {
-				that.next_image();
+			if (startAt === null || startAt === undefined) {
+				that.imageNext();
 			} else {
-				that.switch_to(start_at);
+				that.switchTo(startAt);
 			}
 		}
 
@@ -763,42 +765,42 @@ var SWDF_album_viewer = SWDF_album_viewer || (function () {
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	toggle_slideshow = function (me, that) {
-		if (me.slideshow_stopped === true) {
-			that.start_slideshow();
+	slideshowToggle = function (me, that) {
+		if (me.slideshowStopped === true) {
+			that.slideshowStart();
 		} else {
-			that.stop_slideshow();
+			that.slideshowStop();
 		}
 		return true;
 	};
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	next_image = function (me, that) {
-		that.switch_to(me.selected_image_id + 1);
+	imageNext = function (me, that) {
+		that.switchTo(me.selectedImageID + 1);
 		return true;
 	};
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	previous_image = function (me, that) {
-		that.switch_to(me.selected_image_id - 1);
+	imagePrevious = function (me, that) {
+		that.switchTo(me.selectedImageID - 1);
 		return true;
 	};
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	random_image = function (me, that) {
+	imageRandom = function (me, that) {
 		var rid = -1;
 		//Check that there are more than two images before doing a true random switch (likely to get caught in a loop otherwise)
-		if (that.album_images.length > 2) {
+		if (that.albumImages.length > 2) {
 			do {
-				rid = Math.round(Math.random() * (that.album_images.length - 1));
-			} while (rid === me.selected_image_id);
+				rid = Math.round(Math.random() * (that.albumImages.length - 1));
+			} while (rid === me.selectedImageID);
 		} else {
-			rid = me.selected_image_id + 1;
+			rid = me.selectedImageID + 1;
 		}
-		that.switch_to(rid);
+		that.switchTo(rid);
 		return true;
 	};
 
