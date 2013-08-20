@@ -210,7 +210,7 @@
  *
  *	It can look a little confusing at first, but is really quite simple once you get your
  *	head around it.
- *	
+ *
  *	Happy Hacking!
  */
 
@@ -241,47 +241,53 @@ var AlbumViewer = AlbumViewer || (function () {
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	construct = function (args) {
-		var	that = this, me = {};
+
+		//Make sure we're being instantiated
+		if (!(this instanceof AlbumViewer)) {
+			throw new Error("Constructor called as a function. (In other words you forgot the \"new\" keyword.)");
+		}
+
+		var	self = this, priv = {};
 
 		//Keep track of the number of instances
 		instances += 1;
 
 		//Default State for user-settable variables
-		that.blankImage = args.blankImage || "http://james-swift.com/images/blank.gif";						//The location of a blank image to load at startup
-		that.fadeStep = args.fadeStep || 2;									//How much opacity should be added/subtracted each cycle
-		that.fadeTime = args.fadeTime || 12;									//How long in ms between each cycle
-		that.slideshowDelay = args.slideshowDelay || 5000;							//How long in ms before the next image is loaded
-		that.slideshowRandom = args.slideshowRandom || false;							//Load random images instead of start to finish
-		that.endlessAlbum = (args.endlessAlbum === undefined || args.endlessAlbum === true) ? true : false;	//Should the album reset when it reaches the end
-		that.fadeBoth = args.fadeBoth || true;
+		self.blankImage = args.blankImage || "http://james-swift.com/images/blank.gif";						//The location of a blank image to load at startup
+		self.fadeStep = args.fadeStep || 2;									//How much opacity should be added/subtracted each cycle
+		self.fadeTime = args.fadeTime || 12;									//How long in ms between each cycle
+		self.slideshowDelay = args.slideshowDelay || 5000;							//How long in ms before the next image is loaded
+		self.slideshowRandom = args.slideshowRandom || false;							//Load random images instead of start to finish
+		self.endlessAlbum = (args.endlessAlbum === undefined || args.endlessAlbum === true) ? true : false;	//Should the album reset when it reaches the end
+		self.fadeBoth = args.fadeBoth || true;
 
 		//Other slideshow variables
-		me.c1 = {};
-		me.c2 = {};
-		me.slideshowStopped = true;
-		me.instanceID = instances;
-		me.enableLinks = (args.enableLinks === undefined || args.enableLinks === true) ? true : false;
-		me.loading = false;
-		me.loadingStartedCalled = false;
-		that.selectedImageID = null;
-		that.selectedImageSrc = null;
-		that.history = [];
+		priv.c1 = {};
+		priv.c2 = {};
+		priv.slideshowStopped = true;
+		priv.instanceID = instances;
+		priv.enableLinks = (args.enableLinks === undefined || args.enableLinks === true) ? true : false;
+		priv.loading = false;
+		priv.loadingStartedCalled = false;
+		self.selectedImageID = null;
+		self.selectedImageSrc = null;
+		self.history = [];
 
 		//Should we build the html elements ourselves?
 		if (args.container !== null && document.getElementById(args.container) !== null) {
 			//Link to main container
-			me.c0 = document.getElementById(args.container);
+			priv.c0 = document.getElementById(args.container);
 
 			//Build HTML elements
-			buildHTML(me, that);
+			buildHTML(priv, self);
 
 			//Update args with element names
-			args.container1 = "AlbumViewer_" + me.instanceID + "_t1";
-			args.link1 = "AlbumViewer_" + me.instanceID + "_l1";
-			args.img1 = "AlbumViewer_" + me.instanceID + "_i1";
-			args.container2 = "AlbumViewer_" + me.instanceID + "_t2";
-			args.link2 = "AlbumViewer_" + me.instanceID + "_l2";
-			args.img2 = "AlbumViewer_" + me.instanceID + "_i2";
+			args.container1 = "AlbumViewer_" + priv.instanceID + "_t1";
+			args.link1 = "AlbumViewer_" + priv.instanceID + "_l1";
+			args.img1 = "AlbumViewer_" + priv.instanceID + "_i1";
+			args.container2 = "AlbumViewer_" + priv.instanceID + "_t2";
+			args.link2 = "AlbumViewer_" + priv.instanceID + "_l2";
+			args.img2 = "AlbumViewer_" + priv.instanceID + "_i2";
 		}
 
 		//Check all the needed html Elements are in place
@@ -289,24 +295,24 @@ var AlbumViewer = AlbumViewer || (function () {
 				document.getElementById(args.img1)		!== null &&
 				document.getElementById(args.container2)	!== null &&
 				document.getElementById(args.img2)		!== null &&
-				(me.enableLinks === false || (document.getElementById(args.link1) !== null && document.getElementById(args.link2) !== null))
+				(priv.enableLinks === false || (document.getElementById(args.link1) !== null && document.getElementById(args.link2) !== null))
 				) {
-			//Link Elements to me
-			me.c1.table = document.getElementById(args.container1);
-			me.c1.img = document.getElementById(args.img1);
-			me.c2.table = document.getElementById(args.container2);
-			me.c2.img = document.getElementById(args.img2);
-			if (me.enableLinks === true) {
-				me.c1.link = document.getElementById(args.link1);
-				me.c2.link = document.getElementById(args.link2);
+			//Link Elements to priv
+			priv.c1.table = document.getElementById(args.container1);
+			priv.c1.img = document.getElementById(args.img1);
+			priv.c2.table = document.getElementById(args.container2);
+			priv.c2.img = document.getElementById(args.img2);
+			if (priv.enableLinks === true) {
+				priv.c1.link = document.getElementById(args.link1);
+				priv.c2.link = document.getElementById(args.link2);
 			}
 
 			//Fix IE7 Stupidity
 			if (args.container !== null) {
-				me.c1.img.style.width = "auto";
-				me.c1.img.style.height = "auto";
-				me.c2.img.style.width = "auto";
-				me.c2.img.style.height = "auto";
+				priv.c1.img.style.width = "auto";
+				priv.c1.img.style.height = "auto";
+				priv.c2.img.style.width = "auto";
+				priv.c2.img.style.height = "auto";
 			}
 		} else {
 			throw {
@@ -316,13 +322,13 @@ var AlbumViewer = AlbumViewer || (function () {
 		}
 
 		//list args for user reference
-		that.args = args;
+		self.args = args;
 
 		//Declare functions that can be over-written by the user
-		that.onSwitchTo = function () {};
-		that.loadingStarted = function () {};
-		that.loadingComplete = function () {};
-		that.getSrc = function (srcID) {
+		self.onSwitchTo = function () {};
+		self.loadingStarted = function () {};
+		self.loadingComplete = function () {};
+		self.getSrc = function (srcID) {
 			var isrc;
 			if (this.imagesAreArrays === true) {
 				isrc = this.albumImages[srcID][this.imageNameField];
@@ -335,14 +341,14 @@ var AlbumViewer = AlbumViewer || (function () {
 				return this.albumLocation + isrc;
 			}
 		};
-		that.getAlt = function (srcID) {
+		self.getAlt = function (srcID) {
 			if (this.imagesAreArrays === true) {
 				return this.albumImages[srcID][this.imageNameField].substr(this.albumImages[srcID][this.imageNameField].lastIndexOf("/") + 1);
 			} else {
 				return this.albumImages[srcID].substr(this.albumImages[srcID].lastIndexOf("/") + 1);
 			}
 		};
-		that.getLink = function (srcID) {
+		self.getLink = function (srcID) {
 			var isrc;
 			if (this.imagesAreArrays === true) {
 				isrc = this.albumImages[srcID][this.imageNameField];
@@ -357,53 +363,53 @@ var AlbumViewer = AlbumViewer || (function () {
 		};
 
 		//Link our functions to this instance (rather than declaring them inside it which would copy them for every instance)
-		that.loadAlbum		= function (album) {
-			return loadAlbum(album, me, that);
+		self.loadAlbum		= function (album) {
+			return loadAlbum(album, priv, self);
 		};
-		that.switchTo		= function (srcID) {
-			return switchTo(srcID, me, that);
+		self.switchTo		= function (srcID) {
+			return switchTo(srcID, priv, self);
 		};
-		that.safeImageID	= function (srcID) {
-			return safeImageID(srcID, me, that);
+		self.safeImageID	= function (srcID) {
+			return safeImageID(srcID, priv, self);
 		};
-		that.findImageID	= function (image) {
-			return findImageID(image, me, that);
+		self.findImageID	= function (image) {
+			return findImageID(image, priv, self);
 		};
-		that.slideshowStart	= function (randomly, startAt) {
-			return slideshowStart(randomly, startAt, me, that);
+		self.slideshowStart	= function (randomly, startAt) {
+			return slideshowStart(randomly, startAt, priv, self);
 		};
-		that.slideshowStop	= function () {
-			return slideshowStop(me, that);
+		self.slideshowStop	= function () {
+			return slideshowStop(priv, self);
 		};
-		that.slideshowToggle	= function () {
-			return slideshowToggle(me, that);
+		self.slideshowToggle	= function () {
+			return slideshowToggle(priv, self);
 		};
-		that.imageNext		= function () {
-			return imageNext(me, that);
+		self.imageNext		= function () {
+			return imageNext(priv, self);
 		};
-		that.imagePrevious	= function () {
-			return imagePrevious(me, that);
+		self.imagePrevious	= function () {
+			return imagePrevious(priv, self);
 		};
-		that.imageRandom	= function () {
-			return imageRandom(me, that);
+		self.imageRandom	= function () {
+			return imageRandom(priv, self);
 		};
-		me.fade			= function () {
-			return fade(me, that);
+		priv.fade			= function () {
+			return fade(priv, self);
 		};
 
-		return that;
+		return self;
 	};
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	buildHTML = function (me, that) {
+	buildHTML = function (priv, self) {
 		var i, dm = {};
 		//Empty the container
-		me.c0.innerHTML = "";
+		priv.c0.innerHTML = "";
 		//Build html elements
 		for (i = 1; i <= 2; i += 1) {
 			dm.table = document.createElement("table");
-			dm.table.setAttribute("id", "AlbumViewer_" + me.instanceID + "_t" + i);
+			dm.table.setAttribute("id", "AlbumViewer_" + priv.instanceID + "_t" + i);
 			dm.table.setAttribute("cellpadding", "0");
 			dm.table.setAttribute("cellspacing", "0");
 			dm.table.style.position = "absolute";
@@ -416,34 +422,34 @@ var AlbumViewer = AlbumViewer || (function () {
 			dm.tbody = document.createElement("tbody");
 			dm.tr = document.createElement("tr");
 			dm.td = document.createElement("td");
-			if (me.enableLinks === true) {
+			if (priv.enableLinks === true) {
 				dm.a = document.createElement("a");
 				dm.a.setAttribute("target", "_blank");
-				dm.a.setAttribute("id", "AlbumViewer_" + me.instanceID + "_l" + i);
+				dm.a.setAttribute("id", "AlbumViewer_" + priv.instanceID + "_l" + i);
 				dm.img = document.createElement("img");
-				dm.img.setAttribute("id", "AlbumViewer_" + me.instanceID + "_i" + i);
-				dm.img.setAttribute("src", that.blankImage);
+				dm.img.setAttribute("id", "AlbumViewer_" + priv.instanceID + "_i" + i);
+				dm.img.setAttribute("src", self.blankImage);
 				dm.img.setAttribute("alt", "Loading");
 				dm.a.appendChild(dm.img);
 				dm.td.appendChild(dm.a);
 			} else {
 				dm.img = document.createElement("img");
-				dm.img.setAttribute("id", "AlbumViewer_" + me.instanceID + "_i" + i);
-				dm.img.setAttribute("src", that.blankImage);
+				dm.img.setAttribute("id", "AlbumViewer_" + priv.instanceID + "_i" + i);
+				dm.img.setAttribute("src", self.blankImage);
 				dm.img.setAttribute("alt", "Loading");
 				dm.td.appendChild(dm.img);
 			}
 			dm.tr.appendChild(dm.td);
 			dm.tbody.appendChild(dm.tr);
 			dm.table.appendChild(dm.tbody);
-			me.c0.appendChild(dm.table);
+			priv.c0.appendChild(dm.table);
 		}
 		return true;
 	};
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	loadAlbum = function (album, me, that) {
+	loadAlbum = function (album, priv, self) {
 
 		if (typeof album === "object") {
 			//Convert images objects into arrays
@@ -460,46 +466,46 @@ var AlbumViewer = AlbumViewer || (function () {
 			if (album.name && album.images && album.images.length > 0 && (album.location === null || typeof album.location === "string")) {
 
 				//Cancel any current actions
-				that.slideshowStop();
+				self.slideshowStop();
 
 				//Populate object
 
-				that.albumName = album.name;
-				that.albumImages = album.images;
-				that.selectedImageID = null;
-				that.selectedImageID = null;
+				self.albumName = album.name;
+				self.albumImages = album.images;
+				self.selectedImageID = null;
+				self.selectedImageID = null;
 
-				that.imageNameField = album.imageNameField || "name";
-				that.imagesAreArrays = false;
-				if (typeof that.albumImages[0] !== "string") {
-					that.imagesAreArrays = true;
+				self.imageNameField = album.imageNameField || "name";
+				self.imagesAreArrays = false;
+				if (typeof self.albumImages[0] !== "string") {
+					self.imagesAreArrays = true;
 				}
 
 				if (album.location !== null) {
 					album.location = album.location.replace(/\\/g, "/");
-					that.albumLocation = (album.location.charAt(album.location.length - 1) !== "/") ? album.location + "/" : album.location;
+					self.albumLocation = (album.location.charAt(album.location.length - 1) !== "/") ? album.location + "/" : album.location;
 				} else {
-					that.albumLocation = null;
+					self.albumLocation = null;
 				}
 
 
 				//Reset Element variables
 
-				me.selectedImageID = -1;
-				me.selectedContainer = 1;
-				me.c1.opacity = 100;
-				me.c2.opacity = 0;
+				priv.selectedImageID = -1;
+				priv.selectedContainer = 1;
+				priv.c1.opacity = 100;
+				priv.c2.opacity = 0;
 
-				me.imageNameField = that.imageNameField;
-				me.imagesAreArrays = that.imagesAreArrays;
+				priv.imageNameField = self.imageNameField;
+				priv.imagesAreArrays = self.imagesAreArrays;
 
 				//Reset Opacity
 				if (IS_IE === false) {
-					me.c1.table.style.opacity = (me.c1.opacity / 100);
-					me.c2.table.style.opacity = (me.c2.opacity / 100);
+					priv.c1.table.style.opacity = (priv.c1.opacity / 100);
+					priv.c2.table.style.opacity = (priv.c2.opacity / 100);
 				} else {
-					me.c1.table.style.filter = "alpha(opacity=" + me.c1.opacity + ")";
-					me.c2.table.style.filter = "alpha(opacity=" + me.c2.opacity + ")";
+					priv.c1.table.style.filter = "alpha(opacity=" + priv.c1.opacity + ")";
+					priv.c2.table.style.filter = "alpha(opacity=" + priv.c2.opacity + ")";
 				}
 				return true;
 			}
@@ -514,171 +520,171 @@ var AlbumViewer = AlbumViewer || (function () {
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	switchTo = function (srcID, me, that) {
+	switchTo = function (srcID, priv, self) {
 
 		//Catch over-runs and handle endlessAlbum setting
-		me.nextImageID = that.safeImageID(srcID);
+		priv.nextImageID = self.safeImageID(srcID);
 
 		//If attempting to switch to the current image, just return true (unless in random slideshow)
-		if (me.nextImageID === me.selectedImageID && (that.slideshowRandom === false || me.slideshowStopped === false)) {
+		if (priv.nextImageID === priv.selectedImageID && (self.slideshowRandom === false || priv.slideshowStopped === false)) {
 			return true;
 		}
 
-		//Update that with currently selected image
-		if (me.selectedImageID > -1) {
-			that.history.unshift(me.selectedImageID);
+		//Update self with currently selected image
+		if (priv.selectedImageID > -1) {
+			self.history.unshift(priv.selectedImageID);
 		}
-		that.selectedImageID = me.nextImageID;
-		if (me.imagesAreArrays === true) {
-			that.selectedImageSrc = that.albumImages[me.nextImageID][me.imageNameField];
+		self.selectedImageID = priv.nextImageID;
+		if (priv.imagesAreArrays === true) {
+			self.selectedImageSrc = self.albumImages[priv.nextImageID][priv.imageNameField];
 		} else {
-			that.selectedImageSrc = that.albumImages[me.nextImageID];
+			self.selectedImageSrc = self.albumImages[priv.nextImageID];
 		}
 
 		//Call loadingStarted() in case the user has reassigned that function
-		me.loading = true;
+		priv.loading = true;
 		setTimeout(
 			function () {
-				if (me.loading === true && me.loadingStartedCalled === false) {
-					that.loadingStarted();
-					me.loadingStartedCalled = true;
+				if (priv.loading === true && priv.loadingStartedCalled === false) {
+					self.loadingStarted();
+					priv.loadingStartedCalled = true;
 				}
 			},
 			10
 		);
 
 		//Apply actions to appropriate container
-		if (me.selectedContainer === 1) {
+		if (priv.selectedContainer === 1) {
 			//Stop any actions currently pending
-			me.c2.img.onload = null;
-			me.c2.img.src = that.blankImage;
+			priv.c2.img.onload = null;
+			priv.c2.img.src = self.blankImage;
 
 			//Set onload to trigger fade to switch to hidden container
-			me.c2.img.onload = function () {
-				clearTimeout(me.timer);
-				me.fade();
-				if (me.c1.img.onload === null && me.loading === true) {
-					me.loadingStartedCalled = false;
-					me.loading = false;
-					that.loadingComplete();
+			priv.c2.img.onload = function () {
+				clearTimeout(priv.timer);
+				priv.fade();
+				if (priv.c1.img.onload === null && priv.loading === true) {
+					priv.loadingStartedCalled = false;
+					priv.loading = false;
+					self.loadingComplete();
 				}
 			};
 
 			//Load next source into currently hidden container
-			me.c2.img.src = that.getSrc(me.nextImageID);
-			me.c2.img.alt = that.getAlt(me.nextImageID);
-			if (me.enableLinks === true) {
-				me.c2.link.href = that.getLink(me.nextImageID);
+			priv.c2.img.src = self.getSrc(priv.nextImageID);
+			priv.c2.img.alt = self.getAlt(priv.nextImageID);
+			if (priv.enableLinks === true) {
+				priv.c2.link.href = self.getLink(priv.nextImageID);
 			}
 
 		} else {
 			//Stop any actions currently pending
-			me.c1.img.onload = null;
-			me.c1.img.src = that.blankImage;
+			priv.c1.img.onload = null;
+			priv.c1.img.src = self.blankImage;
 
 			//Set onload to trigger fade to switch to hidden container
-			me.c1.img.onload = function () {
-				me.timer = clearTimeout(me.timer);
-				me.fade();
-				if (me.c2.img.onload === null && me.loading === true) {
-					me.loadingStartedCalled = false;
-					me.loading = false;
-					that.loadingComplete();
+			priv.c1.img.onload = function () {
+				priv.timer = clearTimeout(priv.timer);
+				priv.fade();
+				if (priv.c2.img.onload === null && priv.loading === true) {
+					priv.loadingStartedCalled = false;
+					priv.loading = false;
+					self.loadingComplete();
 				}
 			};
 
 			//Load next source into currently hidden container
-			me.c1.img.src = that.getSrc(me.nextImageID);
-			me.c1.img.alt = that.getAlt(me.nextImageID);
-			if (me.enableLinks === true) {
-				me.c1.link.href = that.getLink(me.nextImageID);
+			priv.c1.img.src = self.getSrc(priv.nextImageID);
+			priv.c1.img.alt = self.getAlt(priv.nextImageID);
+			if (priv.enableLinks === true) {
+				priv.c1.link.href = self.getLink(priv.nextImageID);
 			}
 
 		}
 
-		that.onSwitchTo(me.nextImageID);
+		self.onSwitchTo(priv.nextImageID);
 		return true;
 	};
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	fade = function (me, that) {
-		if (me.selectedContainer === 1) {
-			me.c1.opacity = me.c1.opacity - that.fadeStep;
-			me.c2.opacity = me.c2.opacity + that.fadeStep;
+	fade = function (priv, self) {
+		if (priv.selectedContainer === 1) {
+			priv.c1.opacity = priv.c1.opacity - self.fadeStep;
+			priv.c2.opacity = priv.c2.opacity + self.fadeStep;
 		} else {
-			me.c1.opacity = me.c1.opacity + that.fadeStep;
-			me.c2.opacity = me.c2.opacity - that.fadeStep;
+			priv.c1.opacity = priv.c1.opacity + self.fadeStep;
+			priv.c2.opacity = priv.c2.opacity - self.fadeStep;
 		}
 
 		//Catch over-runs
-		me.c1.opacity = (me.c1.opacity < 0 ? 0 : (me.c1.opacity > 100 ? 100 : me.c1.opacity));
-		me.c2.opacity = (me.c2.opacity < 0 ? 0 : (me.c2.opacity > 100 ? 100 : me.c2.opacity));
+		priv.c1.opacity = (priv.c1.opacity < 0 ? 0 : (priv.c1.opacity > 100 ? 100 : priv.c1.opacity));
+		priv.c2.opacity = (priv.c2.opacity < 0 ? 0 : (priv.c2.opacity > 100 ? 100 : priv.c2.opacity));
 
 		if (IS_IE === false) {
-			if (that.fadeBoth === true) { me.c1.table.style.opacity = (me.c1.opacity / 100); }
-			me.c2.table.style.opacity = (me.c2.opacity / 100);
+			if (self.fadeBoth === true) { priv.c1.table.style.opacity = (priv.c1.opacity / 100); }
+			priv.c2.table.style.opacity = (priv.c2.opacity / 100);
 		} else {
-			if (that.fadeBoth === true) { me.c1.table.style.filter = "alpha(opacity=" + me.c1.opacity + ")"; }
-			me.c2.table.style.filter = "alpha(opacity=" + me.c2.opacity + ")";
+			if (self.fadeBoth === true) { priv.c1.table.style.filter = "alpha(opacity=" + priv.c1.opacity + ")"; }
+			priv.c2.table.style.filter = "alpha(opacity=" + priv.c2.opacity + ")";
 		}
 
 		//Set display to none to allow links on lower layers to work
-		if (me.c1.opacity <= 0) {
-			me.c1.table.style.display = "none";
+		if (priv.c1.opacity <= 0) {
+			priv.c1.table.style.display = "none";
 		} else if (IS_OLD_IE) {
-			me.c1.table.style.display = "inline-block";
+			priv.c1.table.style.display = "inline-block";
 		} else {
-			me.c1.table.style.display = "table";
+			priv.c1.table.style.display = "table";
 		}
-		if (me.c2.opacity <= 0) {
-			me.c2.table.style.display = "none";
+		if (priv.c2.opacity <= 0) {
+			priv.c2.table.style.display = "none";
 		} else if (IS_OLD_IE) {
-			me.c2.table.style.display = "inline-block";
+			priv.c2.table.style.display = "inline-block";
 		} else {
-			me.c2.table.style.display = "table";
+			priv.c2.table.style.display = "table";
 		}
 
-		if (me.c1.opacity > 0 && me.c1.opacity < 100) {
-			me.timer = setTimeout(function () { me.fade(); }, that.fadeTime);
+		if (priv.c1.opacity > 0 && priv.c1.opacity < 100) {
+			priv.timer = setTimeout(function () { priv.fade(); }, self.fadeTime);
 		} else {
 			//Update Selected source
-			me.selectedImageID = me.nextImageID;
+			priv.selectedImageID = priv.nextImageID;
 
-			//Finished fading so update me.selectedContainer
-			if (me.selectedContainer === 1) {
-				me.c2.img.onload = null;
-				me.selectedContainer = 2;
+			//Finished fading so update priv.selectedContainer
+			if (priv.selectedContainer === 1) {
+				priv.c2.img.onload = null;
+				priv.selectedContainer = 2;
 				//Auto-load the next image if no action is currently taking place
-				if (me.c1.img.onload === null) {
-					me.c1.img.src = that.getSrc(that.safeImageID(me.selectedImageID + 1));
+				if (priv.c1.img.onload === null) {
+					priv.c1.img.src = self.getSrc(self.safeImageID(priv.selectedImageID + 1));
 				}
 			} else {
-				me.c1.img.onload = null;
-				me.selectedContainer = 1;
+				priv.c1.img.onload = null;
+				priv.selectedContainer = 1;
 				//Auto-load the next image if no action is currently taking place
-				if (me.c2.img.onload === null) {
-					me.c2.img.src = that.getSrc(that.safeImageID(me.selectedImageID + 1));
+				if (priv.c2.img.onload === null) {
+					priv.c2.img.src = self.getSrc(self.safeImageID(priv.selectedImageID + 1));
 				}
 			}
 
 			//Should we move onto the next picture?
-			if (me.slideshowStopped !== true) {
-				if (that.slideshowRandom === false) {
+			if (priv.slideshowStopped !== true) {
+				if (self.slideshowRandom === false) {
 					//Just move onto the next in the sequence
-					me.timer = setTimeout(
+					priv.timer = setTimeout(
 						function () {
-							that.imageNext();
+							self.imageNext();
 						},
-						that.slideshowDelay
+						self.slideshowDelay
 					);
 				} else {
 					//Pick a random picture to move onto
-					me.timer = setTimeout(
+					priv.timer = setTimeout(
 						function () {
-							that.imageRandom();
+							self.imageRandom();
 						},
-						that.slideshowDelay
+						self.slideshowDelay
 					);
 				}
 			}
@@ -689,20 +695,20 @@ var AlbumViewer = AlbumViewer || (function () {
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	safeImageID = function (srcID, me, that) {
-		if (srcID >= that.albumImages.length) {
-			srcID = that.endlessAlbum ? 0 : that.albumImages.length - 1;
+	safeImageID = function (srcID, priv, self) {
+		if (srcID >= self.albumImages.length) {
+			srcID = self.endlessAlbum ? 0 : self.albumImages.length - 1;
 		}
 		if (srcID < 0) {
-			srcID = that.endlessAlbum ? that.albumImages.length - 1 : 0;
+			srcID = self.endlessAlbum ? self.albumImages.length - 1 : 0;
 		}
-		if (that.albumImages[srcID] === undefined) {
+		if (self.albumImages[srcID] === undefined) {
 			//try to find the next id in the array
-			while (that.albumImages[srcID] === undefined && srcID <= that.albumImages.length) {
+			while (self.albumImages[srcID] === undefined && srcID <= self.albumImages.length) {
 				srcID += 1;
 			}
 			//If still not found return 0
-			if (that.albumImages[srcID] === undefined) {
+			if (self.albumImages[srcID] === undefined) {
 				srcID = 0;
 			}
 		}
@@ -711,52 +717,52 @@ var AlbumViewer = AlbumViewer || (function () {
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	findImageID = function (image, me, that) {
+	findImageID = function (image, priv, self) {
 		var img, i = 0;
-		if (me.imagesAreArrays === true) {
-			for (img in that.albumImages) {
-				if (that.albumImages.hasOwnProperty(img)) {
-					if (that.albumImages[img][me.imageNameField] === image) {
+		if (priv.imagesAreArrays === true) {
+			for (img in self.albumImages) {
+				if (self.albumImages.hasOwnProperty(img)) {
+					if (self.albumImages[img][priv.imageNameField] === image) {
 						return i;
 					}
 					i += 1;
 				}
 			}
 		} else {
-			return that.safeImageID(that.albumImages.indexOf(image));
+			return self.safeImageID(self.albumImages.indexOf(image));
 		}
 		return false;
 	};
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	slideshowStop = function (me, that) {
-		window.clearTimeout(me.timer);
-		me.c1.img.onload = null;
-		me.c2.img.onload = null;
-		me.slideshowStopped = true;
-		that.slideshowStopped = true;
+	slideshowStop = function (priv, self) {
+		window.clearTimeout(priv.timer);
+		priv.c1.img.onload = null;
+		priv.c2.img.onload = null;
+		priv.slideshowStopped = true;
+		self.slideshowStopped = true;
 		return true;
 	};
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	slideshowStart = function (randomly, startAt, me, that) {
-		that.slideshowStop();
-		me.slideshowStopped = false;
-		that.slideshowStopped = false;
+	slideshowStart = function (randomly, startAt, priv, self) {
+		self.slideshowStop();
+		priv.slideshowStopped = false;
+		self.slideshowStopped = false;
 		if (randomly === true) {
-			that.slideshowRandom = true;
+			self.slideshowRandom = true;
 		}
-		if (that.slideshowRandom === true) {
-			that.switchTo(Math.floor(Math.random() * (that.albumImages.length - 1)));
-		} else if (me.selectedImageID === that.albumImages.length - 1) {
-			that.switchTo(0);
+		if (self.slideshowRandom === true) {
+			self.switchTo(Math.floor(Math.random() * (self.albumImages.length - 1)));
+		} else if (priv.selectedImageID === self.albumImages.length - 1) {
+			self.switchTo(0);
 		} else {
 			if (startAt === null || startAt === undefined) {
-				that.imageNext();
+				self.imageNext();
 			} else {
-				that.switchTo(startAt);
+				self.switchTo(startAt);
 			}
 		}
 
@@ -765,42 +771,42 @@ var AlbumViewer = AlbumViewer || (function () {
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	slideshowToggle = function (me, that) {
-		if (me.slideshowStopped === true) {
-			that.slideshowStart();
+	slideshowToggle = function (priv, self) {
+		if (priv.slideshowStopped === true) {
+			self.slideshowStart();
 		} else {
-			that.slideshowStop();
+			self.slideshowStop();
 		}
 		return true;
 	};
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	imageNext = function (me, that) {
-		that.switchTo(me.selectedImageID + 1);
+	imageNext = function (priv, self) {
+		self.switchTo(priv.selectedImageID + 1);
 		return true;
 	};
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	imagePrevious = function (me, that) {
-		that.switchTo(me.selectedImageID - 1);
+	imagePrevious = function (priv, self) {
+		self.switchTo(priv.selectedImageID - 1);
 		return true;
 	};
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	imageRandom = function (me, that) {
+	imageRandom = function (priv, self) {
 		var rid = -1;
 		//Check that there are more than two images before doing a true random switch (likely to get caught in a loop otherwise)
-		if (that.albumImages.length > 2) {
+		if (self.albumImages.length > 2) {
 			do {
-				rid = Math.round(Math.random() * (that.albumImages.length - 1));
-			} while (rid === me.selectedImageID);
+				rid = Math.round(Math.random() * (self.albumImages.length - 1));
+			} while (rid === priv.selectedImageID);
 		} else {
-			rid = me.selectedImageID + 1;
+			rid = priv.selectedImageID + 1;
 		}
-		that.switchTo(rid);
+		self.switchTo(rid);
 		return true;
 	};
 
