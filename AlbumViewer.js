@@ -56,7 +56,7 @@
  *	The following are optional and can either be set as elements in the constructor
  *	object or later by editing the new instance using the . dot notation:
  *
- *	blankImage		string	The path to a blank gif image. Used as the initial image to fade from. Default is "images/blank.png"
+ *	blankImage		string	The path to a blank gif image. Used as the initial image to fade from. Default is "http://james-swift.com/images/blank.gif"
  *	fadeStep		number	The amount of opacity to add/subtract on each frame of the fading process. A smaller value is smoother, but fades slower.
  *	fadeTime		number	The time in ms between frames of the fader. A larger value fades slower, but may appear more jerky.
  *	fadeBoth		boolean	Default: true. By default the album viewer, when transitioning, will fade both images - the current and the new - in case they are different dimension (otherwise the edges of one might just suddenly appear). If you know for sure your images will be the same size, you can specify false to halve the browsers work load.
@@ -247,7 +247,7 @@ var AlbumViewer = AlbumViewer || (function () {
 		instances += 1;
 
 		//Default State for user-settable variables
-		that.blankImage = args.blankImage || "images/blank.png";						//The location of a blank image to load at startup
+		that.blankImage = args.blankImage || "http://james-swift.com/images/blank.gif";						//The location of a blank image to load at startup
 		that.fadeStep = args.fadeStep || 2;									//How much opacity should be added/subtracted each cycle
 		that.fadeTime = args.fadeTime || 12;									//How long in ms between each cycle
 		that.slideshowDelay = args.slideshowDelay || 5000;							//How long in ms before the next image is loaded

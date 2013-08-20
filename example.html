@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>AlbumViewer Example</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<script src="AlbumViewer.js"></script>
+	</head>
+	<body>
+		<div id="photoBox" style="width:900px; height:600px; position:relative; margin:auto;"></div>
+		<script>
+			//Initialize album viewer
+			var viewer = new AlbumViewer({
+				container:"photoBox",
+				slideshowDelay:6500,
+				endlessAlbum:true
+			});
+
+			 //Load Album
+			viewer.loadAlbum({
+				name:"Photos",
+				location:"http://james-swift.com/images/",
+				images:['sun.jpg','sea.jpg','bench.jpg']
+			});
+			
+			//Start a slideshow
+			viewer.slideshowStart();
+		</script>
+		<div style="text-align:center;">
+			<a href="javascript:viewer.imagePrevious();">Previous</a> | 
+			<a href="javascript:viewer.slideshowToggle();">Toggle Slideshow</a> | 
+			<a href="javascript:viewer.imageNext();">Next</a>
+		</div>
+	</body>
+</html>
