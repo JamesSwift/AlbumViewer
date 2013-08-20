@@ -51,7 +51,7 @@
  *	container2		string	The ID of the table, div or other element containing the second image.
  *	link2			string	The ID of the anchor (<a>) element associated with the second image. Optional.
  *	img2			string	The ID of the actual img (<img>) element for the second image.
- 	--------------------------------------------------------------------------------------------
+ *	--------------------------------------------------------------------------------------------
  *
  *	The following are optional and can either be set as elements in the constructor
  *	object or later by editing the new instance using the . dot notation:
@@ -163,7 +163,7 @@
  *
  *		//(assuming an instance of the SWDF_album_viewer named rotator)
  *
- *		rotator.get_link = function(image_id){
+ *		rotator.get_link = function(image_id) {
  *			return "large_images/" + this.album_images[image_id];
  *		}
  *
@@ -189,13 +189,13 @@
  *	a closure. A closure is a function which is executed imediately after being declared.
  *	For example:
  *
- *		var a_closure = function(){
+ *		var a_closure = function() {
  *
- *			function do_stuff(i){
+ *			function do_stuff(i) {
  *				return i+=1;
  *			}
  *
- *			return function construct(arg1,arg2){
+ *			return function construct(arg1,arg2) {
  *				var i=do_stuff(2);
  *				return i;
  *			}
@@ -213,36 +213,36 @@
  */
 
 
-var SWDF_album_viewer = SWDF_album_viewer || ( function () {
+var SWDF_album_viewer = SWDF_album_viewer || (function () {
 	"use strict";
 
 	var	construct, build_html, load_album, switch_to, fade, safe_image_id, find_image_id,
 		stop_slideshow, start_slideshow, toggle_slideshow,
 		next_image, previous_image, random_image,
-		IS_IE,IS_OLD_IE,
-		instances=0;
+		IS_IE, IS_OLD_IE,
+		instances = 0;
 
 	//Check wether the browser is Internet Explorer (IE)
 	if (navigator.userAgent.match(/\bMSIE\b/) && (!document.documentMode || document.documentMode < 9)) {
-		IS_IE=true;
+		IS_IE = true;
 	} else {
-		IS_IE=false;
+		IS_IE = false;
 	}
 
-	if (( /\bMSIE 6/.test(navigator.userAgent) || /\bMSIE 7/.test(navigator.userAgent))&& !window.opera){
-		IS_OLD_IE=true;
+	if ((/\bMSIE 6/.test(navigator.userAgent) || /\bMSIE 7/.test(navigator.userAgent)) && !window.opera) {
+		IS_OLD_IE = true;
 	} else {
-		IS_OLD_IE=false;
+		IS_OLD_IE = false;
 	}
 
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	construct = function (args){
+	construct = function (args) {
 		var	that = this, me = {};
 
 		//Keep track of the number of instances
-		instances+=1;
+		instances += 1;
 
 		//Default State for user-setable variables
 		that.blank_image = args.blank_image || "images/blank.png";						//The location of a blank image to load at startup
@@ -250,62 +250,61 @@ var SWDF_album_viewer = SWDF_album_viewer || ( function () {
 		that.fade_time = args.fade_time || 12;									//How long in ms between each cycle
 		that.slideshow_delay = args.slideshow_delay || 5000;							//How long in ms before the next image is loaded
 		that.slideshow_random = args.slideshow_random || false;							//Load random images instead of start to finish
-		that.endless_album = (args.endless_album===undefined || args.endless_album===true) ? true : false;	//Should the album reset when it reaches the end
+		that.endless_album = (args.endless_album === undefined || args.endless_album === true) ? true : false;	//Should the album reset when it reaches the end
 		that.fade_both = args.fade_both || true;
 
 		//Other slideshow variables
 		me.c1 = {};
 		me.c2 = {};
 		me.slideshow_stopped = true;
-		me.instance_id=instances;
-		me.enable_links=(args.enable_links===undefined || args.enable_links===true) ? true : false;
-		me.loading=false;
-		me.loading_started_called=false;
-		that.selected_image_id=null;
-		that.selected_image_src=null;
-		that.history=[];
+		me.instance_id = instances;
+		me.enable_links = (args.enable_links === undefined || args.enable_links === true) ? true : false;
+		me.loading = false;
+		me.loading_started_called = false;
+		that.selected_image_id = null;
+		that.selected_image_src = null;
+		that.history = [];
 
 		//Should we build the html elements ourselves?
-		if (args.container!==null && document.getElementById(args.container)!== null){
+		if (args.container !== null && document.getElementById(args.container) !== null) {
 			//Link to main container
-			me.c0=document.getElementById(args.container);
+			me.c0 = document.getElementById(args.container);
 
 			//Build HTML elements
 			build_html(me, that);
 
 			//Update args with element names
-			args.container1="SWDF_album_viewer_"+me.instance_id+"_t1";
-			args.link1="SWDF_album_viewer_"+me.instance_id+"_l1";
-			args.img1="SWDF_album_viewer_"+me.instance_id+"_i1";
-			args.container2="SWDF_album_viewer_"+me.instance_id+"_t2";
-			args.link2="SWDF_album_viewer_"+me.instance_id+"_l2";
-			args.img2="SWDF_album_viewer_"+me.instance_id+"_i2";
+			args.container1 = "SWDF_album_viewer_" + me.instance_id + "_t1";
+			args.link1 = "SWDF_album_viewer_" + me.instance_id + "_l1";
+			args.img1 = "SWDF_album_viewer_" + me.instance_id + "_i1";
+			args.container2 = "SWDF_album_viewer_" + me.instance_id + "_t2";
+			args.link2 = "SWDF_album_viewer_" + me.instance_id + "_l2";
+			args.img2 = "SWDF_album_viewer_" + me.instance_id + "_i2";
 		}
 
 		//Check all the needed html Elements are in place
-		if (
-			document.getElementById(args.container1)	!== null &&
-			document.getElementById(args.img1)		!== null &&
-			document.getElementById(args.container2)	!== null &&
-			document.getElementById(args.img2)		!== null &&
-			( me.enable_links===false || ( document.getElementById(args.link1) !== null && document.getElementById(args.link2) !== null ) )
-			) {
+		if (document.getElementById(args.container1)			!== null &&
+				document.getElementById(args.img1)		!== null &&
+				document.getElementById(args.container2)	!== null &&
+				document.getElementById(args.img2)		!== null &&
+				(me.enable_links === false || (document.getElementById(args.link1) !== null && document.getElementById(args.link2) !== null))
+				) {
 			//Link Elements to me
 			me.c1.table = document.getElementById(args.container1);
 			me.c1.img = document.getElementById(args.img1);
 			me.c2.table = document.getElementById(args.container2);
 			me.c2.img = document.getElementById(args.img2);
-			if (me.enable_links===true){
+			if (me.enable_links === true) {
 				me.c1.link = document.getElementById(args.link1);
 				me.c2.link = document.getElementById(args.link2);
 			}
 
 			//Fix IE7 Stupidity
-			if (args.container!==null){
-				me.c1.img.style.width="auto";
-				me.c1.img.style.height="auto";
-				me.c2.img.style.width="auto";
-				me.c2.img.style.height="auto";
+			if (args.container !== null) {
+				me.c1.img.style.width = "auto";
+				me.c1.img.style.height = "auto";
+				me.c2.img.style.width = "auto";
+				me.c2.img.style.height = "auto";
 			}
 		} else {
 			throw {
@@ -315,78 +314,78 @@ var SWDF_album_viewer = SWDF_album_viewer || ( function () {
 		}
 
 		//list args for user refference
-		that.args=args;
+		that.args = args;
 
 		//Declare functions that can be over-written by the user
-		that.on_switch_to = function ( ) { };
-		that.loading_started = function ( ) { };
-		that.loading_completed = function ( ) { };
-		that.get_src = function ( src_id ) {
+		that.on_switch_to = function () {};
+		that.loading_started = function () {};
+		that.loading_completed = function () {};
+		that.get_src = function (src_id) {
 			var isrc;
-			if (this.images_are_array===true){
+			if (this.images_are_array === true) {
 				isrc = this.album_images[src_id][this.image_name_field];
 			} else {
 				isrc = this.album_images[src_id];
 			}
-			if (this.album_location===null){
+			if (this.album_location === null) {
 				return isrc;
 			} else {
-				return this.album_location+isrc;
+				return this.album_location + isrc;
 			}
 		};
-		that.get_alt = function ( src_id ) {
-			if (this.images_are_arrays===true){
-				return this.album_images[src_id][this.image_name_field].substr(this.album_images[src_id][this.image_name_field].lastIndexOf("/")+1);
+		that.get_alt = function (src_id) {
+			if (this.images_are_arrays === true) {
+				return this.album_images[src_id][this.image_name_field].substr(this.album_images[src_id][this.image_name_field].lastIndexOf("/") + 1);
 			} else {
-				return this.album_images[src_id].substr(this.album_images[src_id].lastIndexOf("/")+1);
+				return this.album_images[src_id].substr(this.album_images[src_id].lastIndexOf("/") + 1);
 			}
 		};
-		that.get_link = function ( src_id ) {
+		that.get_link = function (src_id) {
 			var isrc;
-			if (this.images_are_array===true){
+			if (this.images_are_array === true) {
 				isrc = this.album_images[src_id][this.image_name_field];
 			} else {
 				isrc = this.album_images[src_id];
 			}
-			if (this.album_location===null){
+			if (this.album_location === null) {
 				return isrc;
 			} else {
-				return this.album_location+isrc;
+				return this.album_location + isrc;
 			}
 		};
 
 		//Link our functions to this instance (rather than declaring them inside it which would copy them for every instance)
-		that.load_album		= function ( album )			{
+		that.load_album		= function (album) {
 			return load_album(album, me, that);
 		};
-		that.switch_to		= function ( src_id )			{
+		that.switch_to		= function (src_id) {
 			return switch_to(src_id, me, that);
 		};
-		that.safe_image_id	= function ( src_id )			{
+		that.safe_image_id	= function (src_id) {
 			return safe_image_id(src_id, me, that);
 		};
-		that.find_image_id	= function ( image )			{
+		that.find_image_id	= function (image) {
 			return find_image_id(image, me, that);
 		};
-		that.start_slideshow	= function ( randomly, start_at )	{
+		that.start_slideshow	= function (randomly, start_at) {
 			return start_slideshow(randomly, start_at, me, that);
 		};
-		that.stop_slideshow	= function ( )				{
+		that.stop_slideshow	= function () {
 			return stop_slideshow(me, that);
 		};
-		that.toggle_slideshow	= function ( )				{
+		that.toggle_slideshow	= function () {
 			return toggle_slideshow(me, that);
 		};
-		that.next_image		= function ( )				{
+		that.next_image		= function () {
 			return next_image(me, that);
 		};
-		that.previous_image	= function ( )				{
+		that.previous_image	= function () {
 			return previous_image(me, that);
 		};
-		that.random_image	= function ( )				{
+		that.random_image	= function () {
 			return random_image(me, that);
 		};
-		me.fade			= function ( )				{
+		me.fade			= function () {
 			return fade(me, that);
 		};
 
@@ -395,41 +394,41 @@ var SWDF_album_viewer = SWDF_album_viewer || ( function () {
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	build_html = function (me, that){
+	build_html = function (me, that) {
 		var i, dm = {};
 		//Empty the container
-		me.c0.innerHTML="";
+		me.c0.innerHTML = "";
 		//Build html elements
-		for (i=1; i<=2; i+=1){
-			dm.table=document.createElement("table");
-			dm.table.setAttribute("id","SWDF_album_viewer_"+me.instance_id+"_t"+i);
-			dm.table.setAttribute("cellpadding","0");
-			dm.table.setAttribute("cellspacing","0");
-			dm.table.style.position="absolute";
-			dm.table.style.zIndex=i;
-			dm.table.style.verticalAlign="middle";
-			dm.table.style.textAlign="center";
-			dm.table.style.width="100%";
-			dm.table.style.height="100%";
+		for (i = 1; i <= 2; i += 1) {
+			dm.table = document.createElement("table");
+			dm.table.setAttribute("id", "SWDF_album_viewer_" + me.instance_id + "_t" + i);
+			dm.table.setAttribute("cellpadding", "0");
+			dm.table.setAttribute("cellspacing", "0");
+			dm.table.style.position = "absolute";
+			dm.table.style.zIndex = i;
+			dm.table.style.verticalAlign = "middle";
+			dm.table.style.textAlign = "center";
+			dm.table.style.width = "100%";
+			dm.table.style.height = "100%";
 
-			dm.tbody=document.createElement("tbody");
-			dm.tr=document.createElement("tr");
-			dm.td=document.createElement("td");
-			if (me.enable_links===true){
-				dm.a=document.createElement("a");
-				dm.a.setAttribute("target","_blank");
-				dm.a.setAttribute("id","SWDF_album_viewer_"+me.instance_id+"_l"+i);
-				dm.img=document.createElement("img");
-				dm.img.setAttribute("id","SWDF_album_viewer_"+me.instance_id+"_i"+i);
-				dm.img.setAttribute("src",that.blank_image);
-				dm.img.setAttribute("alt","Loading");
+			dm.tbody = document.createElement("tbody");
+			dm.tr = document.createElement("tr");
+			dm.td = document.createElement("td");
+			if (me.enable_links === true) {
+				dm.a = document.createElement("a");
+				dm.a.setAttribute("target", "_blank");
+				dm.a.setAttribute("id", "SWDF_album_viewer_" + me.instance_id + "_l" + i);
+				dm.img = document.createElement("img");
+				dm.img.setAttribute("id", "SWDF_album_viewer_" + me.instance_id + "_i" + i);
+				dm.img.setAttribute("src", that.blank_image);
+				dm.img.setAttribute("alt", "Loading");
 				dm.a.appendChild(dm.img);
 				dm.td.appendChild(dm.a);
 			} else {
-				dm.img=document.createElement("img");
-				dm.img.setAttribute("id","SWDF_album_viewer_"+me.instance_id+"_i"+i);
-				dm.img.setAttribute("src",that.blank_image);
-				dm.img.setAttribute("alt","Loading");
+				dm.img = document.createElement("img");
+				dm.img.setAttribute("id", "SWDF_album_viewer_" + me.instance_id + "_i" + i);
+				dm.img.setAttribute("src", that.blank_image);
+				dm.img.setAttribute("alt", "Loading");
 				dm.td.appendChild(dm.img);
 			}
 			dm.tr.appendChild(dm.td);
@@ -442,21 +441,21 @@ var SWDF_album_viewer = SWDF_album_viewer || ( function () {
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	load_album = function(album, me, that) {
+	load_album = function (album, me, that) {
 
-		if (typeof album === "object"){
+		if (typeof album === "object") {
 			//Convert images objects into arrays
-			if (typeof album.images === "object"){
-				var old_album_images = album.images;
-				album.images=[];
-				for (var key in old_album_images) {
-				    if (old_album_images.hasOwnProperty(key)) {
-				      album.images.push(old_album_images[key]);
-				    }
+			if (typeof album.images === "object") {
+				var key, old_album_images = album.images;
+				album.images = [];
+				for (key in old_album_images) {
+					if (old_album_images.hasOwnProperty(key)) {
+						album.images.push(old_album_images[key]);
+					}
 				}
 			}
 
-			if (album.name && album.images && album.images.length>0 && (album.location === null || typeof album.location==="string") ){
+			if (album.name && album.images && album.images.length > 0 && (album.location === null || typeof album.location === "string")) {
 
 				//Cancel any current actions
 				that.stop_slideshow();
@@ -470,14 +469,13 @@ var SWDF_album_viewer = SWDF_album_viewer || ( function () {
 
 				that.image_name_field = album.image_name_field || "name";
 				that.images_are_arrays = false;
-				if ( typeof that.album_images[0] !== "string"){
+				if (typeof that.album_images[0] !== "string") {
 					that.images_are_arrays = true;
 				}
-				that.images_are_arrays = that.images_are_arrays;
 
-				if (album.location!==null){
-					album.location=album.location.replace(/\\/g,"/");
-					that.album_location = (album.location.charAt(album.location.length-1)!=="/") ? album.location+"/" : album.location;
+				if (album.location !== null) {
+					album.location = album.location.replace(/\\/g, "/");
+					that.album_location = (album.location.charAt(album.location.length - 1) !== "/") ? album.location + "/" : album.location;
 				} else {
 					that.album_location = null;
 				}
@@ -494,12 +492,12 @@ var SWDF_album_viewer = SWDF_album_viewer || ( function () {
 				me.images_are_arrays = that.images_are_arrays;
 
 				//Reset Opacity
-				if (IS_IE===false){
-					me.c1.table.style.opacity=(me.c1.opacity/100);
-					me.c2.table.style.opacity=(me.c2.opacity/100);
+				if (IS_IE === false) {
+					me.c1.table.style.opacity = (me.c1.opacity / 100);
+					me.c2.table.style.opacity = (me.c2.opacity / 100);
 				} else {
-					me.c1.table.style.filter="alpha(opacity="+me.c1.opacity+")";
-					me.c2.table.style.filter="alpha(opacity="+me.c2.opacity+")";
+					me.c1.table.style.filter = "alpha(opacity=" + me.c1.opacity + ")";
+					me.c2.table.style.filter = "alpha(opacity=" + me.c2.opacity + ")";
 				}
 				return true;
 			}
@@ -514,84 +512,84 @@ var SWDF_album_viewer = SWDF_album_viewer || ( function () {
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	switch_to = function(src_id, me, that) {
+	switch_to = function (src_id, me, that) {
 
 		//Catch over-runs and handle endless_album setting
-		me.next_image_id=that.safe_image_id(src_id);
+		me.next_image_id = that.safe_image_id(src_id);
 
 		//If attempting to switch to the current image, just return true (unless in random slideshow)
-		if (me.next_image_id===me.selected_image_id && (that.slideshow_random===false || me.slideshow_stopped===false )){
+		if (me.next_image_id === me.selected_image_id && (that.slideshow_random === false || me.slideshow_stopped === false)) {
 			return true;
 		}
 
 		//Update that with currently selected image
-		if (me.selected_image_id>-1){
+		if (me.selected_image_id > -1) {
 			that.history.unshift(me.selected_image_id);
 		}
-		that.selected_image_id=me.next_image_id;
-		if (me.images_are_arrays===true) {
-			that.selected_image_src=that.album_images[me.next_image_id][me.image_name_field];
+		that.selected_image_id = me.next_image_id;
+		if (me.images_are_arrays === true) {
+			that.selected_image_src = that.album_images[me.next_image_id][me.image_name_field];
 		} else {
-			that.selected_image_src=that.album_images[me.next_image_id];
+			that.selected_image_src = that.album_images[me.next_image_id];
 		}
 
 		//Call loading_started() in case the user has reassigned that function
-		me.loading=true;
+		me.loading = true;
 		setTimeout(
-			function(){
-				if (me.loading===true && me.loading_started_called===false){
+			function () {
+				if (me.loading === true && me.loading_started_called === false) {
 					that.loading_started();
-					me.loading_started_called=true;
+					me.loading_started_called = true;
 				}
-			}
-			,10
-			);
+			},
+			10
+		);
 
 		//Apply actions to appropriate container
-		if (me.selected_container===1) {
+		if (me.selected_container === 1) {
 			//Stop any actions currently pending
-			me.c2.img.onload=null;
-			me.c2.img.src=that.blank_image;
+			me.c2.img.onload = null;
+			me.c2.img.src = that.blank_image;
 
 			//Set onload to trigger fade to switch to hidden container
-			me.c2.img.onload=function(){
+			me.c2.img.onload = function () {
 				clearTimeout(me.timer);
 				me.fade();
-				if (me.c1.img.onload===null && me.loading===true) {
-					me.loading_started_called=false;
-					me.loading=false;
+				if (me.c1.img.onload === null && me.loading === true) {
+					me.loading_started_called = false;
+					me.loading = false;
 					that.loading_completed();
 				}
 			};
 
 			//Load next source into currently hidden container
-			me.c2.img.src=that.get_src(me.next_image_id);
-			me.c2.img.alt=that.get_alt(me.next_image_id);
-			if (me.enable_links===true){
-				me.c2.link.href=that.get_link(me.next_image_id);
+			me.c2.img.src = that.get_src(me.next_image_id);
+			me.c2.img.alt = that.get_alt(me.next_image_id);
+			if (me.enable_links === true) {
+				me.c2.link.href = that.get_link(me.next_image_id);
 			}
 
 		} else {
 			//Stop any actions currently pending
-			me.c1.img.onload=null;
-			me.c1.img.src=that.blank_image;
+			me.c1.img.onload = null;
+			me.c1.img.src = that.blank_image;
 
 			//Set onload to trigger fade to switch to hidden container
-			me.c1.img.onload=function(){
+			me.c1.img.onload = function () {
 				me.timer = clearTimeout(me.timer);
 				me.fade();
-				if (me.c2.img.onload===null && me.loading===true) {
-					me.loading_started_called=false;
-					me.loading=false;
+				if (me.c2.img.onload === null && me.loading === true) {
+					me.loading_started_called = false;
+					me.loading = false;
 					that.loading_completed();
 				}
 			};
 
 			//Load next source into currently hidden container
-			me.c1.img.src=that.get_src(me.next_image_id);
-			me.c1.img.alt=that.get_alt(me.next_image_id);
-			if (me.enable_links===true){
-				me.c1.link.href=that.get_link(me.next_image_id);
+			me.c1.img.src = that.get_src(me.next_image_id);
+			me.c1.img.alt = that.get_alt(me.next_image_id);
+			if (me.enable_links === true) {
+				me.c1.link.href = that.get_link(me.next_image_id);
 			}
 
 		}
@@ -602,84 +600,84 @@ var SWDF_album_viewer = SWDF_album_viewer || ( function () {
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	fade = function(me, that) {
-		if (me.selected_container===1) {
-			me.c1.opacity=me.c1.opacity-that.fade_step;
-			me.c2.opacity=me.c2.opacity+that.fade_step;
+	fade = function (me, that) {
+		if (me.selected_container === 1) {
+			me.c1.opacity = me.c1.opacity - that.fade_step;
+			me.c2.opacity = me.c2.opacity + that.fade_step;
 		} else {
-			me.c1.opacity=me.c1.opacity+that.fade_step;
-			me.c2.opacity=me.c2.opacity-that.fade_step;
+			me.c1.opacity = me.c1.opacity + that.fade_step;
+			me.c2.opacity = me.c2.opacity - that.fade_step;
 		}
 
 		//Catch over-runs
-		me.c1.opacity=(me.c1.opacity<0 ? 0 : (me.c1.opacity>100 ? 100 : me.c1.opacity));
-		me.c2.opacity=(me.c2.opacity<0 ? 0 : (me.c2.opacity>100 ? 100 : me.c2.opacity));
+		me.c1.opacity = (me.c1.opacity < 0 ? 0 : (me.c1.opacity > 100 ? 100 : me.c1.opacity));
+		me.c2.opacity = (me.c2.opacity < 0 ? 0 : (me.c2.opacity > 100 ? 100 : me.c2.opacity));
 
-		if (IS_IE===false){
-			if (that.fade_both===true) me.c1.table.style.opacity=(me.c1.opacity/100);
-			me.c2.table.style.opacity=(me.c2.opacity/100);
+		if (IS_IE === false) {
+			if (that.fade_both === true) { me.c1.table.style.opacity = (me.c1.opacity / 100); }
+			me.c2.table.style.opacity = (me.c2.opacity / 100);
 		} else {
-			if (that.fade_both===true) me.c1.table.style.filter="alpha(opacity="+me.c1.opacity+")";
-			me.c2.table.style.filter="alpha(opacity="+me.c2.opacity+")";
+			if (that.fade_both === true) { me.c1.table.style.filter = "alpha(opacity=" + me.c1.opacity + ")"; }
+			me.c2.table.style.filter = "alpha(opacity=" + me.c2.opacity + ")";
 		}
 
 		//Set display to none to allow links on lower layers to work
-		if (me.c1.opacity<=0) {
-			me.c1.table.style.display="none";
-		} else if (IS_OLD_IE){
-			me.c1.table.style.display="inline-block";
+		if (me.c1.opacity <= 0) {
+			me.c1.table.style.display = "none";
+		} else if (IS_OLD_IE) {
+			me.c1.table.style.display = "inline-block";
 		} else {
-			me.c1.table.style.display="table";
+			me.c1.table.style.display = "table";
 		}
-		if (me.c2.opacity<=0) {
-			me.c2.table.style.display="none";
-		} else if (IS_OLD_IE){
-			me.c2.table.style.display="inline-block";
+		if (me.c2.opacity <= 0) {
+			me.c2.table.style.display = "none";
+		} else if (IS_OLD_IE) {
+			me.c2.table.style.display = "inline-block";
 		} else {
-			me.c2.table.style.display="table";
+			me.c2.table.style.display = "table";
 		}
 
-		if (me.c1.opacity>0 && me.c1.opacity<100) {
-			me.timer=setTimeout(function(){ me.fade(); },that.fade_time);
+		if (me.c1.opacity > 0 && me.c1.opacity < 100) {
+			me.timer = setTimeout(function () { me.fade(); }, that.fade_time);
 		} else {
 			//Update Selected source
-			me.selected_image_id=me.next_image_id;
+			me.selected_image_id = me.next_image_id;
 
 			//Finished fading so update me.selected_container
-			if (me.selected_container===1) {
-				me.c2.img.onload=null;
-				me.selected_container=2;
+			if (me.selected_container === 1) {
+				me.c2.img.onload = null;
+				me.selected_container = 2;
 				//Auto-load the next image if no action is currently taking place
-				if (me.c1.img.onload===null) {
-					me.c1.img.src=that.get_src(that.safe_image_id(me.selected_image_id+1));
+				if (me.c1.img.onload === null) {
+					me.c1.img.src = that.get_src(that.safe_image_id(me.selected_image_id + 1));
 				}
 			} else {
-				me.c1.img.onload=null;
-				me.selected_container=1;
+				me.c1.img.onload = null;
+				me.selected_container = 1;
 				//Auto-load the next image if no action is currently taking place
-				if (me.c2.img.onload===null) {
-					me.c2.img.src=that.get_src(that.safe_image_id(me.selected_image_id+1));
+				if (me.c2.img.onload === null) {
+					me.c2.img.src = that.get_src(that.safe_image_id(me.selected_image_id + 1));
 				}
 			}
 
 			//Should we move onto the next picture?
-			if (me.slideshow_stopped!==true) {
-				if (that.slideshow_random===false){
+			if (me.slideshow_stopped !== true) {
+				if (that.slideshow_random === false) {
 					//Just move onto the next in the sequence
-					me.timer=setTimeout(
-						function(){
+					me.timer = setTimeout(
+						function () {
 							that.next_image();
 						},
 						that.slideshow_delay
-						);
+					);
 				} else {
 					//Pick a random picture to move onto
-					me.timer=setTimeout(
-						function(){
+					me.timer = setTimeout(
+						function () {
 							that.random_image();
 						},
 						that.slideshow_delay
-						);
+					);
 				}
 			}
 
@@ -689,20 +687,20 @@ var SWDF_album_viewer = SWDF_album_viewer || ( function () {
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	safe_image_id = function(src_id, me, that){
-		if (src_id>=that.album_images.length) {
-			src_id = that.endless_album ? 0 : that.album_images.length-1;
+	safe_image_id = function (src_id, me, that) {
+		if (src_id >= that.album_images.length) {
+			src_id = that.endless_album ? 0 : that.album_images.length - 1;
 		}
-		if (src_id<0) {
-			src_id = that.endless_album ? that.album_images.length-1 : 0;
+		if (src_id < 0) {
+			src_id = that.endless_album ? that.album_images.length - 1 : 0;
 		}
-		if (that.album_images[src_id]===undefined){
+		if (that.album_images[src_id] === undefined) {
 			//try to find the next id in the array
-			while (that.album_images[src_id]===undefined && src_id<=that.album_images.length){
-				src_id+=1;
+			while (that.album_images[src_id] === undefined && src_id <= that.album_images.length) {
+				src_id += 1;
 			}
 			//If still not found return 0
-			if (that.album_images[src_id]===undefined){
+			if (that.album_images[src_id] === undefined) {
 				src_id = 0;
 			}
 		}
@@ -711,15 +709,15 @@ var SWDF_album_viewer = SWDF_album_viewer || ( function () {
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	find_image_id = function(image, me, that){
-		var img,i=0;
-		if (me.images_are_arrays===true){
-			for (img in that.album_images){
-				if (that.album_images.hasOwnProperty(img)){
-					if (that.album_images[img][me.image_name_field]==image) {
+	find_image_id = function (image, me, that) {
+		var img, i = 0;
+		if (me.images_are_arrays === true) {
+			for (img in that.album_images) {
+				if (that.album_images.hasOwnProperty(img)) {
+					if (that.album_images[img][me.image_name_field] === image) {
 						return i;
 					}
-					i+=1;
+					i += 1;
 				}
 			}
 		} else {
@@ -730,30 +728,30 @@ var SWDF_album_viewer = SWDF_album_viewer || ( function () {
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	stop_slideshow = function(me, that) {
+	stop_slideshow = function (me, that) {
 		window.clearTimeout(me.timer);
-		me.c1.img.onload=null;
-		me.c2.img.onload=null;
-		me.slideshow_stopped=true;
-		that.slideshow_stopped=true;
+		me.c1.img.onload = null;
+		me.c2.img.onload = null;
+		me.slideshow_stopped = true;
+		that.slideshow_stopped = true;
 		return true;
 	};
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	start_slideshow = function(randomly, start_at, me, that) {
+	start_slideshow = function (randomly, start_at, me, that) {
 		that.stop_slideshow();
-		me.slideshow_stopped=false;
-		that.slideshow_stopped=false;
-		if (randomly===true){
-			that.slideshow_random=true;
+		me.slideshow_stopped = false;
+		that.slideshow_stopped = false;
+		if (randomly === true) {
+			that.slideshow_random = true;
 		}
-		if (that.slideshow_random===true){
-			that.switch_to(Math.floor(Math.random()*(that.album_images.length-1)));
-		} else if (me.selected_image_id===that.album_images.length-1){
+		if (that.slideshow_random === true) {
+			that.switch_to(Math.floor(Math.random() * (that.album_images.length - 1)));
+		} else if (me.selected_image_id === that.album_images.length - 1) {
 			that.switch_to(0);
 		} else {
-			if (start_at===null || start_at===undefined){
+			if (start_at === null || start_at === undefined) {
 				that.next_image();
 			} else {
 				that.switch_to(start_at);
@@ -765,8 +763,8 @@ var SWDF_album_viewer = SWDF_album_viewer || ( function () {
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	toggle_slideshow = function(me, that) {
-		if (me.slideshow_stopped===true){
+	toggle_slideshow = function (me, that) {
+		if (me.slideshow_stopped === true) {
 			that.start_slideshow();
 		} else {
 			that.stop_slideshow();
@@ -776,29 +774,29 @@ var SWDF_album_viewer = SWDF_album_viewer || ( function () {
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	next_image = function(me, that) {
-		that.switch_to(me.selected_image_id+1);
+	next_image = function (me, that) {
+		that.switch_to(me.selected_image_id + 1);
 		return true;
 	};
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	previous_image = function(me, that) {
-		that.switch_to(me.selected_image_id-1);
+	previous_image = function (me, that) {
+		that.switch_to(me.selected_image_id - 1);
 		return true;
 	};
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	random_image = function(me, that) {
-		var rid=-1;
+	random_image = function (me, that) {
+		var rid = -1;
 		//Check that there are more than two images before doing a true random switch (likely to get caught in a loop otherwise)
-		if (that.album_images.length>2){
+		if (that.album_images.length > 2) {
 			do {
-				rid=Math.round(Math.random()*(that.album_images.length-1));
-			} while (rid===me.selected_image_id);
+				rid = Math.round(Math.random() * (that.album_images.length - 1));
+			} while (rid === me.selected_image_id);
 		} else {
-			rid=me.selected_image_id+1;
+			rid = me.selected_image_id + 1;
 		}
 		that.switch_to(rid);
 		return true;
@@ -807,11 +805,11 @@ var SWDF_album_viewer = SWDF_album_viewer || ( function () {
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	//Fix IE7 stupidity
-	if(!Array.indexOf){
-		Array.prototype.indexOf = function(obj, start){
+	if (!Array.indexOf) {
+		Array.prototype.indexOf = function (obj, start) {
 			var i;
-			for(i=(start||0); i<this.length; i+=1){
-				if(this[i]===obj){
+			for (i = (start || 0); i < this.length; i += 1) {
+				if (this[i] === obj) {
 					return i;
 				}
 			}
