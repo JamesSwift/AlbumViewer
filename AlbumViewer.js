@@ -210,8 +210,29 @@
  *
  *	It can look a little confusing at first, but is really quite simple once you get your
  *	head around it.
+ *	
+ *	The other thing worth mentioning is the "self" and "priv" variable names. These variables
+ *	are there to make sense of JavaScript's slightly odd approach to scoping. Essentially,
+ *	the self variable always represents the currently instantiated instance of AlbumViewer.
+ *	All the public methods and properties (functions and variables) are accessible through
+ *	that variable. The "priv" variable is short for "private". That variable contains all 
+ *	the non-public methods and properties of the currently instantiated instance of the
+ *	AlbumViewer. For example, the fade() method.
+ *	
+ *	If you decide to edit the source code, the rule of thumb for deciding where to store a 
+ *	variable is this: If you need to trust it's contents (e.g. read it back later and rely on
+ *	it being correct), or if you want to keep it private, store it in "priv". If you want to 
+ *	expose it to the user, whether to intentionally allow them to overwrite it or just for 
+ *	informational purposes, store it in "self".
+ *	
+ *	Please feel free to post bug reports or feature requests on GitHub, and I'd love to take
+ *	some pull requests.
  *
  *	Happy Hacking!
+ *	
+ *	James Swift
+
+
  */
 
 
