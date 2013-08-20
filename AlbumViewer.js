@@ -148,7 +148,7 @@
  *		)
  *		return					Your function should return a string containing the location of the image.
  *
- *	getAlt (				Called whenever the AlbumViewer want to update the "alt" text of an image. You could perhpas append you own description.
+ *	getAlt (				Called whenever the AlbumViewer want to update the "alt" text of an image. You could perhaps append you own description.
  *		imageID					The array id of the requested image (from albumImages)
  *		)
  *		return					Your function should return a string containing the new alt text for the requested image
@@ -224,7 +224,7 @@ var AlbumViewer = AlbumViewer || (function () {
 		IS_IE, IS_OLD_IE,
 		instances = 0;
 
-	//Check wether the browser is Internet Explorer (IE)
+	//Check whether the browser is Internet Explorer (IE)
 	if (navigator.userAgent.match(/\bMSIE\b/) && (!document.documentMode || document.documentMode < 9)) {
 		IS_IE = true;
 	} else {
@@ -246,7 +246,7 @@ var AlbumViewer = AlbumViewer || (function () {
 		//Keep track of the number of instances
 		instances += 1;
 
-		//Default State for user-setable variables
+		//Default State for user-settable variables
 		that.blankImage = args.blankImage || "images/blank.png";						//The location of a blank image to load at startup
 		that.fadeStep = args.fadeStep || 2;									//How much opacity should be added/subtracted each cycle
 		that.fadeTime = args.fadeTime || 12;									//How long in ms between each cycle
@@ -315,7 +315,7 @@ var AlbumViewer = AlbumViewer || (function () {
 			};
 		}
 
-		//list args for user refference
+		//list args for user reference
 		that.args = args;
 
 		//Declare functions that can be over-written by the user
@@ -507,7 +507,7 @@ var AlbumViewer = AlbumViewer || (function () {
 
 		throw {
 			name: "InvalidObject",
-			message: "The album object you passed is invalid. Please make sure it contains the properties 'name','images' (and array of 1 or more image file names) and 'location' (the path to the folder containting the images)."
+			message: "The album object you passed is invalid. Please make sure it contains the properties 'name','images' (and array of 1 or more image file names) and 'location' (the path to the folder containing the images)."
 		};
 
 	};
