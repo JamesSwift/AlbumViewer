@@ -33,7 +33,7 @@
  *
  *
  *	///////////////////////////////////////////////////////////////////////////////////
- *	The AlbumViewer has the following user-setable variables:
+ *	The AlbumViewer has the following user-settable variables:
  *
  *	The following can only be set as elements in the constructor object (they cannot
  *	be altered once the AlbumViewer has been initialized). If you do not specify
@@ -43,7 +43,7 @@
  *	enableLinks		boolean	If you plan to have the displayed images link to their source files, set this to true. If set to false, no links will be generated.
  *
  *	--------------------------------------------------------------------------------------------
- *	container		string	The ID of a div or other element to construct a simple album viewer inside. If you plan to construct a complex viewer, create and then specify each element below in your html file instead.
+ *	container		string	The ID of a div or other element to construct a simple album viewer inside. If you plan to construct a complex viewer, create and then specify each element below in your HTML file instead.
  *	--------------- OR -------------------------------------------------------------------------
  *	container1		string	The ID of the table, div or other element containing the first image.
  *	link1			string	The ID of the anchor (<a>) element associated with the first image. Optional.
@@ -57,9 +57,9 @@
  *	object or later by editing the new instance using the . dot notation:
  *
  *	blankImage		string	The path to a blank gif image. Used as the initial image to fade from. Default is "images/blank.png"
- *	fadeStep		number	The amount of opacity to add/subtract on each frame of the fading proccess. A smaller value is smoother, but fades slower.
+ *	fadeStep		number	The amount of opacity to add/subtract on each frame of the fading process. A smaller value is smoother, but fades slower.
  *	fadeTime		number	The time in ms between frames of the fader. A larger value fades slower, but may appear more jerky.
- *	fadeBoth		boolean	Default: true. By default the album viewer, when transitioning, will fade both images - the current and the new - in case they are different dimension (otherwise the edges of one mgiht just suddenly appear). If you know for sure your images will be the same size, you can specify false to halve the browsers work load.
+ *	fadeBoth		boolean	Default: true. By default the album viewer, when transitioning, will fade both images - the current and the new - in case they are different dimension (otherwise the edges of one might just suddenly appear). If you know for sure your images will be the same size, you can specify false to halve the browsers work load.
  *	slideshowDelay		number	The delay between each slide in ms.
  *	slideshowRandom		boolean	If set to true, the slideshow will display the images randomly instead of sequentially.
  *	endlessAlbum		boolean	When set to true, once the slideshow has reached the end of the album it will continue from the start. Otherwise the slideshow will just end.
@@ -67,11 +67,11 @@
  *
  *
  *	///////////////////////////////////////////////////////////////////////////////////
- *	The AlbumViewer has the following non-setable variables which can be accessed
- *	(after the album viewer has been intiialized), using the . dot notation. They are
- *	provided for referrence only, altering them will not change anything.
+ *	The AlbumViewer has the following non-settable variables which can be accessed
+ *	(after the album viewer has been initialized), using the . dot notation. They are
+ *	provided for reference only, altering them will not change anything.
  *
- *	args			array	The arguments that where passed to the constructor. Includes the IDs for the container group even if they were not specified (as in rotator.args.img1, rotator.args.container1, rotator.args.link2 etc.) for refference.
+ *	args			array	The arguments that where passed to the constructor. Includes the IDs for the container group even if they were not specified (as in rotator.args.img1, rotator.args.container1, rotator.args.link2 etc.) for reference.
  *	selectedImageID		number	The array ID of the currently selected image.
  *	selectedImageSrc	string	The image name as taken from "albumImages". Has not been passed through getSrc().
  *	history			array	This array contains the history of requested images. Item 0 is always the last requested image (history is unshift-ed rather than push-ed). The currently selected image is not stored in history, but is found in "selectedImageID".
@@ -97,7 +97,7 @@
  *		  }
  *		)
  *
- *	switchTo (				Call switchTo to display a specific image form the "albumImages" array.
+ *	switchTo (				Call switchTo to display a specific image from the "albumImages" array.
  *			imageID			The "Images" array id of an image you want to switch to. If the id is out of bounds it will be corrected.
  *		)
  *
@@ -113,7 +113,7 @@
  *
  *	imagePrevious ( )			Moves to the previous image in the array. If "endlessAlbum" is true, it will start at the end of the array once the first item in the array has been reached.
  *
- *	imageRandom ( )				Displays a random image form the "albumImages" array.
+ *	imageRandom ( )				Displays a random image from the "albumImages" array.
  *
  *	slideshowStart (			Starts a slideshow of the images in "albumImages"
  *			randomly			If this argument is true, it will set "slideshowRandom" to true and play a random never-ending slideshow.
@@ -132,7 +132,7 @@
  *	///////////////////////////////////////////////////////////////////////////////////
  *	The AlbumViewer has the following functions available for you to reassign to
  *	aid in building applications on top of it. You do not need to reassign them, the
- *	album viewer will function correctly normally, but you may wish to resaign them
+ *	album viewer will function correctly normally, but you may wish to reassign them
  *	to extend it's abilities.
  *
  *	onSwitchTo (				Called whenever the selected image changes.
@@ -141,25 +141,25 @@
  *
  *	loadingStarted ( )			Called whenever the AlbumViewer expects a delay in loading the requested image (more than 10 ms).
  *
- *	loadingComplete ( )			Called when the AlbumViewer has finished dowloading data. Just before the fade transition has started,
+ *	loadingComplete ( )			Called when the AlbumViewer has finished downloading data. Just before the fade transition has started,
  *
  *	getSrc (				Caled whenever the AlbumViewer needs to download an image. It allows you to alter the requested URL (perhaps to route it through an image resizer script)
  *		imageID					The array id of the requested image (from albumImages)
  *		)
- *		return					Your function should return a string containg the location of the image.
+ *		return					Your function should return a string containing the location of the image.
  *
- *	getAlt (				Caled whenever the AlbumViewer want to update the "alt" text of an image. You could perhpas append you own description.
+ *	getAlt (				Called whenever the AlbumViewer want to update the "alt" text of an image. You could perhpas append you own description.
  *		imageID					The array id of the requested image (from albumImages)
  *		)
- *		return					Your function should return a string containg the new alt text for the requested image
+ *		return					Your function should return a string containing the new alt text for the requested image
  *
- *	getLink (				Caled whenever the AlbumViewer needs to generate a link to an image. By default it just links to the image source, but you might want to make it link to a larger version, or an album page with cooments.
+ *	getLink (				Called whenever the AlbumViewer needs to generate a link to an image. By default it just links to the image source, but you might want to make it link to a larger version, or an album page with comments.
  *		imageID					The array id of the requested image (from albumImages)
  *		)
- *		return					Your function should return a string containg the url to be used as a link to this image.
+ *		return					Your function should return a string containing the url to be used as a link to this image.
  *
  *
- *	You could reasign one of the above functions like this:
+ *	You could reassign one of the above functions like this:
  *
  *		//(assuming an instance of the AlbumViewer named rotator)
  *
@@ -182,11 +182,11 @@
  *	that a lot of memory would be needlessly consumed with each new instance. The solution
  *	to this problem is to put only the constructor inside the main function, and declare
  *	any other needed functions outside of it. That way, when a copy is made, only the
- *	constructor is copied, the other functions are just refferenced.
+ *	constructor is copied, the other functions are just referenced.
  *
  *	The problem with doing that though is that the global namespace is cluttered up with
  *	lots of extra functions. To avoid that, the AlbumViewer is encapsulated inside
- *	a closure. A closure is a function which is executed imediately after being declared.
+ *	a closure. A closure is a function which is executed immediately after being declared.
  *	For example:
  *
  *		var aClosure = function() {
