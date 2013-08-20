@@ -1,7 +1,7 @@
 James Swift - Album Viewer v0.23.0
 ==================
 
-A simple tool to turn an array of image locations into a simple embedded photo viewer/spinner.
+A simple tool (with no dependencies) to turn an array of image locations into a simple embedded photo viewer/spinner.
 
 `//Initialize album viewer
 var rotator = new AlbumViewer({
