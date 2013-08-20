@@ -1,4 +1,4 @@
-James Swift - Album Viewer v0.23.0
+Album Viewer v0.23.0
 ==================
 
 A simple tool (with no dependencies) to turn an array of image locations into a simple embedded photo viewer/spinner.
@@ -22,7 +22,7 @@ A simple tool (with no dependencies) to turn an array of image locations into a 
 	//Start a slideshow
 	rotator.slideshowStart();
 
-The AlbumViewer is designed to be simple to use, but to also be extensible. For example, you can hook in your own functions to alter it's behaviour:
+The AlbumViewer is designed to be simple to use, but  also to be extensible. For example, you can hook in your own functions to alter it's behaviour:
 
 	//Instead of loading just an array of images, load an array of objects with data 
 	//associated with each image. This data can easily be accessed later.
@@ -80,7 +80,7 @@ But please note that during beta development we will remain at version v0.*.*
 
 For more information please visit [http://semver.org/](http://semver.org/).
 
-## License: Creative Commons Attribution - Share Alike 3.0
+## Creative Commons Attribution - Share Alike 3.0
 
 <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/deed.en_US">
 <img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a>
