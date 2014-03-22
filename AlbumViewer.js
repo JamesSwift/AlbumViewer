@@ -1,5 +1,5 @@
 /*
- *	James-Swift/AlbumViewer
+ *	JamesSwift/AlbumViewer
  *
  *	Copyright James Swift 2012 - Creative Commons Attribution-ShareAlike 3.0
  *

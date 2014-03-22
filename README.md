@@ -69,10 +69,10 @@ The AlbumViewer is designed to be simple to use, but  also to be extensible. For
 
 To get a copy of the code, at your terminal type:
 
-`git clone git://github.com/James-Swift/AlbumViewer.git`
+`git clone git://github.com/JamesSwift/AlbumViewer.git`
 
 or alternatively you can 
-[download a zipped version](https://github.com/James-Swift/AlbumViewer/archive/master.zip).
+[download a zipped version](https://github.com/JamesSwift/AlbumViewer/archive/master.zip).
 
 
 ## Versioning
@@ -86,5 +86,5 @@ For more information please visit [http://semver.org/](http://semver.org/).
 ## Creative Commons Attribution - Share Alike 3.0
 
 <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">AlbumViewer</span> by 
-<a xmlns:cc="http://creativecommons.org/ns#" href="https://github.com/James-Swift/AlbumViewer" property="cc:attributionName" rel="cc:attributionURL">James Swift</a>
+<a xmlns:cc="http://creativecommons.org/ns#" href="https://github.com/JamesSwift/AlbumViewer" property="cc:attributionName" rel="cc:attributionURL">James Swift</a>
  is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/deed.en_US">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.
