@@ -53,7 +53,7 @@ The AlbumViewer is designed to be simple to use, but  also to be extensible. For
 
 ##What it does
 
-+ Simply turn an array into an photo viewer/spinner
++ Simply turn an array into a photo viewer/spinner
 + Has customizable fade transition
 + Allows easy extension (if desired)
 + Works with your existing GUI (if desired)
