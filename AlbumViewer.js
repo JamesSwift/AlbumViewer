@@ -3,7 +3,7 @@
  *
  *	Copyright James Swift 2012 - Creative Commons Attribution-ShareAlike 3.0
  *
- *	2013-08-21  - Version: v0.25.1
+ *	2016-04-07  - Version: v0.25.2
  *
  *	This file creates a global object named AlbumViewer which allows you to
  *	easily insert a simple album viewer into any element on a page.
